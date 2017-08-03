@@ -35,7 +35,8 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.9.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
 
-    compile 'cz.msebera.android:httpclient:4.4.1.2'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
 
     testCompile 'junit:junit:4.12'
+    testCompile "org.mockito:mockito-core:2.8.47"
 }
