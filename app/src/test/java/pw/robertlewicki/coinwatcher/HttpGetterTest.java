@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import pw.robertlewicki.coinwatcher.Util.HttpGetter;
+import pw.robertlewicki.coinwatcher.Utils.HttpGetter;
 
 public class HttpGetterTest {
 

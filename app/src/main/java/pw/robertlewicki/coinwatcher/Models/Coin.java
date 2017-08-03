@@ -1,4 +1,4 @@
-package pw.robertlewicki.coinwatcher.Model;
+package pw.robertlewicki.coinwatcher.Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

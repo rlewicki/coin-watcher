@@ -1,4 +1,4 @@
-package pw.robertlewicki.coinwatcher.Util;
+package pw.robertlewicki.coinwatcher.Utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

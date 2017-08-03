@@ -6,8 +6,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-import pw.robertlewicki.coinwatcher.Model.Coin;
-import pw.robertlewicki.coinwatcher.Util.JsonParser;
+import pw.robertlewicki.coinwatcher.Models.Coin;
+import pw.robertlewicki.coinwatcher.Utils.JsonParser;
 
 public class JsonParserTest {
 
