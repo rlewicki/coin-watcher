@@ -8,7 +8,10 @@
         android:layout_height="48dp"
         android:text="@string/lorem_ipsum"
         android:textSize="24sp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textColor="#212121"
         android:gravity="center"
+        android:id="@+id/CoinName"
         />
 
     <TextView
@@ -17,7 +20,9 @@
         android:layout_alignParentBottom="true"
         android:text="@string/lorem_ipsum"
         android:textSize="15sp"
+        android:textColor="#757575"
         android:gravity="center"
+        android:id="@+id/CoinValue"
         />
 
     <TextView
@@ -25,7 +30,10 @@
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:text="@string/lorem_ipsum"
-        android:textSize="15sp"
+        android:textSize="24sp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textColor="#212121"
         android:gravity="center"
+        android:id="@+id/CoinPercent"
         />
 </RelativeLayout>
