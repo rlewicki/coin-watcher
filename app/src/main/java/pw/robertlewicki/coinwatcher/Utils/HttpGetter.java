@@ -12,6 +12,7 @@ public class HttpGetter implements IHttpGetter {
     @Override
     public String getResponse(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
+
         Request request = new Request.Builder()
                 .url(url)
                 .build();
