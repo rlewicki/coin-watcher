@@ -13,17 +13,15 @@ import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter implements IFragmentUpdater {
+public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private ArrayList<BaseFragment> fragments = new ArrayList<>();
 
     public SectionsPagerAdapter(FragmentManager fm, Application app) {
         super(fm);
 
-        new CoinGetter(this).execute();
-
         fragments.add(BaseFragment.newInstance("All", app));
-        fragments.add(BaseFragment.newInstance("Chosen", app));
+        fragments.add(BaseFragment.newInstance("Favorites", app));
     }
 
     @Override
@@ -39,12 +37,5 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter implements IFragm
     @Override
     public CharSequence getPageTitle(int position) {
         return fragments.get(position).getTitle();
-    }
-
-    @Override
-    public void updateFragments(List<Coin> coins) {
-        for(BaseFragment fragment : fragments) {
-            fragment.update(coins);
-        }
     }
 }

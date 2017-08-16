@@ -5,5 +5,5 @@ import java.util.List;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 
 public interface IFragmentUpdater {
-    void updateFragments(List<Coin> coins);
+    void update(List<Coin> coins);
 }

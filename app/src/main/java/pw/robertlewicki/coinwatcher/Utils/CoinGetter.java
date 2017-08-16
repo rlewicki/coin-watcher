@@ -42,6 +42,6 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>> {
     @Override
     protected void onPostExecute(List<Coin> data) {
         super.onPostExecute(data);
-        fragmentUpdater.updateFragments(data);
+        fragmentUpdater.update(data);
     }
 }
