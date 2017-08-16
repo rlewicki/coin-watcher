@@ -55,8 +55,8 @@ public class ListAdapter extends BaseAdapter {
         ButterKnife.bind(this, newView);
 
         coinName.setText(coins.get(position).currencyName);
-        coinPercent.setText(coins.get(position).dailyPercentChange);
-        coinValue.setText(coins.get(position).priceUsd);
+        coinPercent.setText(String.format("%s%%", coins.get(position).dailyPercentChange));
+        coinValue.setText(String.format("$%s", coins.get(position).priceUsd));
 
         return newView;
     }
