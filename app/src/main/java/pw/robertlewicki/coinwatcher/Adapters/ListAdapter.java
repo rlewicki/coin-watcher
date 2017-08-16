@@ -47,7 +47,7 @@ public class ListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(app.getApplicationContext());
         View newView = convertView;
-        if(newView== null) {
+        if(newView == null) {
             newView = inflater.inflate(R.layout.adapter_list_row, parent, false);
         }
 
