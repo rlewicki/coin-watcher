@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Consider using this in somehow useful way", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Consider using this in some useful way", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if(id == R.id.action_search) {
             return true;
         }
 
