@@ -1,39 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
     <TextView
+        android:id="@+id/CoinName"
         android:layout_width="256dp"
-        android:layout_height="48dp"
+        android:layout_height="42dp"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
         android:text="@string/lorem_ipsum"
-        android:textSize="24sp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
         android:textColor="#212121"
-        android:gravity="center"
-        android:id="@+id/CoinName"
-        />
+        android:textSize="22sp" />
 
     <TextView
-        android:layout_width="256dp"
-        android:layout_height="24dp"
-        android:layout_alignParentBottom="true"
-        android:text="@string/lorem_ipsum"
-        android:textSize="15sp"
-        android:textColor="#757575"
-        android:gravity="center"
         android:id="@+id/CoinValue"
-        />
+        android:layout_width="256dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:text="@string/lorem_ipsum"
+        android:textColor="#757575"
+        android:textSize="15sp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="128dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:text="@string/lorem_ipsum"
-        android:textSize="24sp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-        android:textColor="#212121"
-        android:gravity="center"
-        android:id="@+id/CoinPercent"
-        />
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/CoinPercent"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/lorem_ipsum"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+            android:textColor="#212121"
+            android:textSize="18sp" />
+
+
+        <ImageView
+            android:id="@+id/GainArrow"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:cropToPadding="false"
+            app:srcCompat="@drawable/ic_arrow_gain_green_24dp" />
+
+    </LinearLayout>
 </RelativeLayout>

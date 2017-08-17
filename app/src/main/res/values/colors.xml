@@ -7,4 +7,7 @@
     <color name="circleOrange">#FF9900</color>
     <color name="circleGreen">#009900</color>
     <color name="circleBlue">#000099</color>
+
+    <color name="lose">#d50000</color>
+    <color name="gain">#64dd17</color>
 </resources>
