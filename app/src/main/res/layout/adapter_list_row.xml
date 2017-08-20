@@ -39,7 +39,7 @@
             android:id="@+id/CoinPercent"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="right|center"
             android:text="@string/lorem_ipsum"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
             android:textColor="#212121"
@@ -50,7 +50,7 @@
             android:id="@+id/GainArrow"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_horizontal"
             android:cropToPadding="false"
             app:srcCompat="@drawable/ic_arrow_gain_green_24dp" />
 
