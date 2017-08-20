@@ -68,14 +68,17 @@ public class ListAdapter extends BaseAdapter {
 
         coinName.setText(coins.get(position).symbol);
         coinValue.setText(String.format("$%s", coins.get(position).priceUsd));
-        coinPercent.setText(String.format("%s%%", coins.get(position).dailyPercentChange));
 
-        if(coins.get(position).dailyPercentChange.contains("-")) {
-            gainArrow.setImageDrawable(redArrow);
-            coinPercent.setTextColor(loseColor);
-        } else {
-            gainArrow.setImageDrawable(greenArrow);
-            coinPercent.setTextColor(gainColor);
+        if(coins.get(position).dailyPercentChange != null) {
+            if(coins.get(position).dailyPercentChange.contains("-")) {
+                gainArrow.setImageDrawable(redArrow);
+                coinPercent.setText(String.format("%s%%", coins.get(position).dailyPercentChange));
+                coinPercent.setTextColor(loseColor);
+            } else {
+                gainArrow.setImageDrawable(greenArrow);
+                coinPercent.setText(String.format("+%s%%", coins.get(position).dailyPercentChange));
+                coinPercent.setTextColor(gainColor);
+            }
         }
 
         return newView;

@@ -6,12 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import pw.robertlewicki.coinwatcher.Fragments.BaseFragment;
-import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
-import pw.robertlewicki.coinwatcher.Models.Coin;
-import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
