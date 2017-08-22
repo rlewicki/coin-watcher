@@ -17,7 +17,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         super(fm);
 
         fragments.add(BaseFragment.newInstance("All", app));
-        fragments.add(BaseFragment.newInstance("Favorites", app));
+        fragments.add(BaseFragment.newInstance("My", app));
     }
 
     @Override

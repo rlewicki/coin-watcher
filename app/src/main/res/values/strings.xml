@@ -4,4 +4,12 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="lorem_ipsum">Lorem Ipsum</string>
     <string name="search_title">Search</string>
+    <string name="rank">Rank:</string>
+    <string name="full_name">Full name:</string>
+    <string name="price_usd">Price USD:</string>
+    <string name="volume_24h">Volume (24h):</string>
+    <string name="market_cap">Market cap:</string>
+    <string name="available_supply">Available supply:</string>
+    <string name="total_supply">Total supply:</string>
+    <string name="last_updated">Last updated:</string>
 </resources>
