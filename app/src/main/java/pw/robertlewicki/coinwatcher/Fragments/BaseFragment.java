@@ -21,59 +21,66 @@ import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 
-public class BaseFragment extends Fragment implements IFragmentUpdater {
-
+public class BaseFragment extends Fragment implements IFragmentUpdater
+{
+    private final IFragmentUpdater self = this;
     @BindView(R.id.SwipeView)
     SwipeRefreshLayout swipeView;
-
     @BindView(R.id.CoinListView)
     ListView listView;
-
     private String title;
     private Application app;
     private List<Coin> coins;
 
-    private final IFragmentUpdater self = this;
+    public BaseFragment()
+    {
+    }
 
-    public BaseFragment() {}
-
-    public static BaseFragment newInstance(String title, Application app) {
+    public static BaseFragment newInstance(String title, Application app)
+    {
         BaseFragment fragment = new BaseFragment();
 
-        fragment.title  = title;
-        fragment.app    = app;
+        fragment.title = title;
+        fragment.app = app;
 
         return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, rootView);
 
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
 
             @Override
-            public void onRefresh() {
+            public void onRefresh()
+            {
                 new CoinGetter(self).execute();
             }
         });
 
         swipeView.setColorSchemeResources(R.color.circleOrange,
-                                          R.color.circleGreen,
-                                          R.color.circleBlue);
+                R.color.circleGreen,
+                R.color.circleBlue);
 
-        swipeView.post(new Runnable() {
+        swipeView.post(new Runnable()
+        {
             @Override
-            public void run() {
+            public void run()
+            {
                 swipeView.setRefreshing(true);
                 new CoinGetter(self).execute();
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 Bundle data = new Bundle();
                 Coin coin = coins.get(position);
 
@@ -95,14 +102,16 @@ public class BaseFragment extends Fragment implements IFragmentUpdater {
     }
 
     @Override
-    public void update(List<Coin> coins) {
+    public void update(List<Coin> coins)
+    {
         this.coins = coins;
 
         listView.setAdapter(new ListAdapter(app, coins));
         swipeView.setRefreshing(false);
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 }

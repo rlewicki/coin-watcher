@@ -9,11 +9,13 @@ import java.util.ArrayList;
 
 import pw.robertlewicki.coinwatcher.Fragments.BaseFragment;
 
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public class SectionsPagerAdapter extends FragmentPagerAdapter
+{
 
     private ArrayList<BaseFragment> fragments = new ArrayList<>();
 
-    public SectionsPagerAdapter(FragmentManager fm, Application app) {
+    public SectionsPagerAdapter(FragmentManager fm, Application app)
+    {
         super(fm);
 
         fragments.add(BaseFragment.newInstance("All", app));
@@ -21,17 +23,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(int position)
+    {
         return fragments.get(position);
     }
 
     @Override
-    public int getCount() {
+    public int getCount()
+    {
         return fragments.size();
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
+    public CharSequence getPageTitle(int position)
+    {
         return fragments.get(position).getTitle();
     }
 }

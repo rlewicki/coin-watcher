@@ -15,7 +15,8 @@ import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
-public class DetailsDialogFragment extends DialogFragment {
+public class DetailsDialogFragment extends DialogFragment
+{
 
     @BindView(R.id.rankField)
     TextView rankField;
@@ -35,7 +36,8 @@ public class DetailsDialogFragment extends DialogFragment {
     TextView lastUpdateTimeField;
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -43,14 +45,14 @@ public class DetailsDialogFragment extends DialogFragment {
         ButterKnife.bind(this, dialogView);
 
         Bundle data = getArguments();
-        rankField               .setText(data.getString(BundleKeys.RANK));
-        fullNameField           .setText(data.getString(BundleKeys.FULL_NAME));
-        priceUsdField           .setText(data.getString(BundleKeys.PRICE_USD));
-        dailyVolumeUsdField     .setText(data.getString(BundleKeys.DAILY_VOLUME));
-        marketCapUsdField       .setText(data.getString(BundleKeys.MARKET_CAP));
-        availableSupplyField    .setText(data.getString(BundleKeys.AVAILABLE_SUPPLY));
-        totalSupplyField        .setText(data.getString(BundleKeys.TOTAL_SUPPLY));
-        lastUpdateTimeField     .setText(data.getString(BundleKeys.LAST_UPDATE_TIME));
+        rankField.setText(data.getString(BundleKeys.RANK));
+        fullNameField.setText(data.getString(BundleKeys.FULL_NAME));
+        priceUsdField.setText(data.getString(BundleKeys.PRICE_USD));
+        dailyVolumeUsdField.setText(data.getString(BundleKeys.DAILY_VOLUME));
+        marketCapUsdField.setText(data.getString(BundleKeys.MARKET_CAP));
+        availableSupplyField.setText(data.getString(BundleKeys.AVAILABLE_SUPPLY));
+        totalSupplyField.setText(data.getString(BundleKeys.TOTAL_SUPPLY));
+        lastUpdateTimeField.setText(data.getString(BundleKeys.LAST_UPDATE_TIME));
 
         builder.setView(dialogView);
 
