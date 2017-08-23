@@ -1,7 +1,6 @@
 package pw.robertlewicki.coinwatcher.Adapters;
 
 import android.app.Application;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +24,11 @@ public class ListAdapter extends BaseAdapter {
     @BindView(R.id.CoinPercent) TextView coinPercent;
     @BindView(R.id.CoinValue) TextView coinValue;
     @BindView(R.id.GainArrow) ImageView gainArrow;
+    @BindView(R.id.CoinIcon) ImageView coinIcon;
 
     @BindDrawable(R.drawable.ic_arrow_gain_green_24dp) Drawable greenArrow;
     @BindDrawable(R.drawable.ic_arrow_lose_red_24dp) Drawable redArrow;
+    @BindDrawable(R.drawable.btc) Drawable bitcoinIcon;
 
     @BindColor(R.color.gain) int gainColor;
     @BindColor(R.color.lose) int loseColor;
@@ -63,23 +64,26 @@ public class ListAdapter extends BaseAdapter {
             newView = inflater.inflate(R.layout.adapter_list_row, parent, false);
         }
 
-        // newView properties setup
         ButterKnife.bind(this, newView);
 
-        coinName.setText(coins.get(position).symbol);
-        coinValue.setText(String.format("$%s", coins.get(position).priceUsd));
+        Coin coin = coins.get(position);
 
-        if(coins.get(position).dailyPercentChange != null) {
-            if(coins.get(position).dailyPercentChange.contains("-")) {
+        coinName.setText(coin.symbol);
+        coinValue.setText(String.format("$%s", coin.priceUsd));
+
+        if(coin.dailyPercentChange != null) {
+            if(coin.dailyPercentChange.contains("-")) {
                 gainArrow.setImageDrawable(redArrow);
-                coinPercent.setText(String.format("%s%%", coins.get(position).dailyPercentChange));
+                coinPercent.setText(String.format("%s%%", coin.dailyPercentChange));
                 coinPercent.setTextColor(loseColor);
             } else {
                 gainArrow.setImageDrawable(greenArrow);
-                coinPercent.setText(String.format("+%s%%", coins.get(position).dailyPercentChange));
+                coinPercent.setText(String.format("+%s%%", coin.dailyPercentChange));
                 coinPercent.setTextColor(gainColor);
             }
         }
+
+        coinIcon.setImageDrawable(bitcoinIcon);
 
         return newView;
     }
