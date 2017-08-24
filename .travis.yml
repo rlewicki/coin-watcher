@@ -1,22 +1,23 @@
 language: android
 jdk:
     - oraclejdk8
-sudo: true
-before_install:
-    - chmod +x gradlew
+sudo: false
+
 android:
     components:
         - tools
         - platform-tools
         - tools
     
-        - build-tools-26.0.1
-        - android-25
+        - build-tools-24.0.2
+        - android-22
+        - android-24
+        
+        - sys-img-armeabi-v7a-android-22
         
         - extra-google-m2repository
         - extra-android-m2repository
         
-        - sys-img-armeabi-v7a-addon-google_apis-google-22
 before_script:
     - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
     - emulator -avd test -no-skin -no-audio -no-window &
