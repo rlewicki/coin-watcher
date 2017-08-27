@@ -32,4 +32,6 @@ public class Coin
     public String weeklyPercentChange;
     @JsonProperty("last_updated")
     public String lastUpdated;
+
+    public int drawableId;
 }

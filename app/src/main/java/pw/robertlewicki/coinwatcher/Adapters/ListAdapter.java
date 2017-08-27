@@ -1,6 +1,7 @@
 package pw.robertlewicki.coinwatcher.Adapters;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,12 @@ public class ListAdapter extends BaseAdapter
     {
         this.app = application;
         this.coins = coins;
+        Context context = app.getApplicationContext();
+        for(Coin coin : coins)
+        {
+            coin.drawableId = context.getResources().getIdentifier(
+                    coin.symbol.toLowerCase(), "drawable", context.getPackageName());
+        }
     }
 
     @Override
@@ -104,7 +111,7 @@ public class ListAdapter extends BaseAdapter
             }
         }
 
-        coinIcon.setImageDrawable(bitcoinIcon);
+        coinIcon.setImageResource(coin.drawableId);
 
         return newView;
     }
