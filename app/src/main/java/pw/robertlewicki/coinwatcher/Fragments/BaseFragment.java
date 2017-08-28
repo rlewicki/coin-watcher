@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,17 +25,13 @@ import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 public class BaseFragment extends Fragment implements IFragmentUpdater
 {
     private final IFragmentUpdater self = this;
-    @BindView(R.id.SwipeView)
-    SwipeRefreshLayout swipeView;
-    @BindView(R.id.CoinListView)
-    ListView listView;
+    @BindView(R.id.SwipeView) SwipeRefreshLayout swipeView;
+    @BindView(R.id.CoinListView) ListView listView;
+
     private String title;
     private Application app;
     private List<Coin> coins;
-
-    public BaseFragment()
-    {
-    }
+    private List<Coin> queriedCoins;
 
     public static BaseFragment newInstance(String title, Application app)
     {
@@ -108,6 +105,19 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
 
         listView.setAdapter(new ListAdapter(app, coins));
         swipeView.setRefreshing(false);
+    }
+
+    public void queryCurrencies(String query)
+    {
+        queriedCoins = new ArrayList<>();
+        for(Coin coin : coins)
+        {
+            if(coin.symbol.contains(query.toUpperCase()))
+            {
+                queriedCoins.add(coin);
+            }
+        }
+        listView.setAdapter(new ListAdapter(app, queriedCoins));
     }
 
     public String getTitle()

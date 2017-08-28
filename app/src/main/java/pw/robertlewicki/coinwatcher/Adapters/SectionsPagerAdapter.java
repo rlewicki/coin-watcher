@@ -39,4 +39,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
         return fragments.get(position).getTitle();
     }
+
+    public void queryCurrencies(String query)
+    {
+        fragments.get(0).queryCurrencies(query);
+    }
 }
