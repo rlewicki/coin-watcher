@@ -49,6 +49,7 @@ public class MyCoinsFragment extends Fragment
                 data.putString(BundleKeys.RANK, coin.rank);
                 data.putString(BundleKeys.FULL_NAME, coin.currencyName);
                 data.putString(BundleKeys.PRICE_USD, coin.priceUsd);
+                data.putString(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
                 data.putString(BundleKeys.MARKET_CAP, coin.marketCapUsd);
                 data.putString(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
                 data.putString(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
