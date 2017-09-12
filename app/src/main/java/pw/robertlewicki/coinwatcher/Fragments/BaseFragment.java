@@ -31,7 +31,6 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
     private String title;
     private Application app;
     private List<Coin> coins;
-    private List<Coin> queriedCoins;
 
     public static BaseFragment newInstance(String title, Application app)
     {
@@ -59,9 +58,11 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
             }
         });
 
-        swipeView.setColorSchemeResources(R.color.circleOrange,
+        swipeView.setColorSchemeResources(
+                R.color.circleOrange,
                 R.color.circleGreen,
-                R.color.circleBlue);
+                R.color.circleBlue
+        );
 
         swipeView.post(new Runnable()
         {
@@ -109,7 +110,7 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
 
     public void queryCurrencies(String query)
     {
-        queriedCoins = new ArrayList<>();
+        List<Coin> queriedCoins = new ArrayList<>();
         for(Coin coin : coins)
         {
             if(coin.symbol.contains(query.toUpperCase()))
