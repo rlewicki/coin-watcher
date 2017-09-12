@@ -1,43 +1,33 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
-import android.app.Application;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
-import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
-import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 
-public class BaseFragment extends Fragment implements IFragmentUpdater
+public class MyCoinsFragment extends Fragment
 {
-    private final IFragmentUpdater self = this;
-    @BindView(R.id.SwipeView) SwipeRefreshLayout swipeView;
     @BindView(R.id.CoinListView) ListView listView;
 
     private String title;
-    private Application app;
     private List<Coin> coins;
 
-    public static BaseFragment newInstance(String title, Application app)
+    public static MyCoinsFragment newInstance(String title)
     {
-        BaseFragment fragment = new BaseFragment();
+        MyCoinsFragment fragment = new MyCoinsFragment();
 
         fragment.title = title;
-        fragment.app = app;
 
         return fragment;
     }
@@ -45,34 +35,8 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.my_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
-
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-
-            @Override
-            public void onRefresh()
-            {
-                new CoinGetter(self).execute();
-            }
-        });
-
-        swipeView.setColorSchemeResources(
-                R.color.circleOrange,
-                R.color.circleGreen,
-                R.color.circleBlue
-        );
-
-        swipeView.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                swipeView.setRefreshing(true);
-                new CoinGetter(self).execute();
-            }
-        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -97,28 +61,6 @@ public class BaseFragment extends Fragment implements IFragmentUpdater
         });
 
         return rootView;
-    }
-
-    @Override
-    public void update(List<Coin> coins)
-    {
-        this.coins = coins;
-
-        listView.setAdapter(new ListAdapter(app, coins));
-        swipeView.setRefreshing(false);
-    }
-
-    public void queryCurrencies(String query)
-    {
-        List<Coin> queriedCoins = new ArrayList<>();
-        for(Coin coin : coins)
-        {
-            if(coin.symbol.contains(query.toUpperCase()))
-            {
-                queriedCoins.add(coin);
-            }
-        }
-        listView.setAdapter(new ListAdapter(app, queriedCoins));
     }
 
     public String getTitle()

@@ -7,41 +7,56 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
-import pw.robertlewicki.coinwatcher.Fragments.BaseFragment;
+import pw.robertlewicki.coinwatcher.Fragments.AllCoinsFragment;
+import pw.robertlewicki.coinwatcher.Fragments.MyCoinsFragment;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
-
-    private ArrayList<BaseFragment> fragments = new ArrayList<>();
+    private AllCoinsFragment allCoinsFragment;
+    private MyCoinsFragment myCoinsFragment;
 
     public SectionsPagerAdapter(FragmentManager fm, Application app)
     {
         super(fm);
 
-        fragments.add(BaseFragment.newInstance("All", app));
-        fragments.add(BaseFragment.newInstance("My", app));
+        allCoinsFragment = AllCoinsFragment.newInstance("All", app);
+        myCoinsFragment = MyCoinsFragment.newInstance("My");
     }
 
     @Override
     public Fragment getItem(int position)
     {
-        return fragments.get(position);
+        switch(position)
+        {
+            case 0:
+                return allCoinsFragment;
+            case 1:
+                return myCoinsFragment;
+        }
+        return null;
     }
 
     @Override
     public int getCount()
     {
-        return fragments.size();
+        return 2;
     }
 
     @Override
     public CharSequence getPageTitle(int position)
     {
-        return fragments.get(position).getTitle();
+        switch(position)
+        {
+            case 0:
+                return allCoinsFragment.getTitle();
+            case 1:
+                return myCoinsFragment.getTitle();
+        }
+        return "";
     }
 
     public void queryCurrencies(String query)
     {
-        fragments.get(0).queryCurrencies(query);
+        allCoinsFragment.queryCurrencies(query);
     }
 }
