@@ -1,6 +1,8 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -94,6 +96,38 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
                 DetailsDialogFragment dialog = new DetailsDialogFragment();
                 dialog.setArguments(data);
                 dialog.show(getActivity().getFragmentManager(), "details_dialog");
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                builder
+                        .setMessage(String.format("Do you want to add %s to your list?", coins.get(position).currencyName))
+                        .setPositiveButton("Proceed", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+
+                return true;
             }
         });
 
