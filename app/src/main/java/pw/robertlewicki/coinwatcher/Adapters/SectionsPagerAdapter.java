@@ -20,7 +20,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
         super(fm);
 
         allCoinsFragment = AllCoinsFragment.newInstance("All", app);
-        myCoinsFragment = MyCoinsFragment.newInstance("My");
+        myCoinsFragment = MyCoinsFragment.newInstance("My", app);
+        allCoinsFragment.addObserver(myCoinsFragment);
     }
 
     @Override

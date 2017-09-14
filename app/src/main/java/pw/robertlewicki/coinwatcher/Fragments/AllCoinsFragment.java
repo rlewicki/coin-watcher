@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
+import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
@@ -34,12 +35,15 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     private Application app;
     private List<Coin> coins;
 
+    private List<ILongTapObserver> tapObservers;
+
     public static AllCoinsFragment newInstance(String title, Application app)
     {
         AllCoinsFragment fragment = new AllCoinsFragment();
 
         fragment.title = title;
         fragment.app = app;
+        fragment.tapObservers = new ArrayList<>();
 
         return fragment;
     }
@@ -106,14 +110,19 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+                final Coin selectedCoin = coins.get(position);
+
                 builder
-                        .setMessage(String.format("Do you want to add %s to your list?", coins.get(position).currencyName))
+                        .setMessage(String.format("Do you want to add %s to your list?", selectedCoin.currencyName))
                         .setPositiveButton("Proceed", new DialogInterface.OnClickListener()
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-
+                                for(ILongTapObserver observer : tapObservers)
+                                {
+                                    observer.update(selectedCoin);
+                                }
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
@@ -154,6 +163,11 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             }
         }
         listView.setAdapter(new ListAdapter(app, queriedCoins));
+    }
+
+    public void addObserver(ILongTapObserver observer)
+    {
+        tapObservers.add(observer);
     }
 
     public String getTitle()

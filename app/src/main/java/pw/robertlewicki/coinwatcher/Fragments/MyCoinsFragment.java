@@ -1,5 +1,6 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,26 +9,32 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
+import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
-public class MyCoinsFragment extends Fragment
+public class MyCoinsFragment extends Fragment implements ILongTapObserver
 {
     @BindView(R.id.CoinListView) ListView listView;
 
     private String title;
+    private Application app;
     private List<Coin> coins;
 
-    public static MyCoinsFragment newInstance(String title)
+    public static MyCoinsFragment newInstance(String title, Application app)
     {
         MyCoinsFragment fragment = new MyCoinsFragment();
 
         fragment.title = title;
+        fragment.app = app;
+        fragment.coins = new ArrayList<>();
 
         return fragment;
     }
@@ -67,5 +74,17 @@ public class MyCoinsFragment extends Fragment
     public String getTitle()
     {
         return title;
+    }
+
+    @Override
+    public void update(Coin coin)
+    {
+        coins.add(coin);
+        updateView();
+    }
+
+    private void updateView()
+    {
+        listView.setAdapter(new ListAdapter(app, coins));
     }
 }
