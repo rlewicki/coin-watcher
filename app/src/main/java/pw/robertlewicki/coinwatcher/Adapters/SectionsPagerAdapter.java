@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
-
 import pw.robertlewicki.coinwatcher.Fragments.AllCoinsFragment;
 import pw.robertlewicki.coinwatcher.Fragments.MyCoinsFragment;
 
@@ -21,7 +19,8 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
 
         allCoinsFragment = AllCoinsFragment.newInstance("All", app);
         myCoinsFragment = MyCoinsFragment.newInstance("My", app);
-        allCoinsFragment.addObserver(myCoinsFragment);
+        allCoinsFragment.addLongTapObserver(myCoinsFragment);
+        allCoinsFragment.addDataChangedObserver(myCoinsFragment);
     }
 
     @Override

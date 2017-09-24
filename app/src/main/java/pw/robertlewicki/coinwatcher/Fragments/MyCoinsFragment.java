@@ -1,6 +1,8 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,16 +13,20 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
+import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
-public class MyCoinsFragment extends Fragment implements ILongTapObserver
+public class MyCoinsFragment
+        extends Fragment
+        implements ILongTapObserver, IDataChangedObserver
 {
     @BindView(R.id.CoinListView) ListView listView;
 
@@ -40,7 +46,8 @@ public class MyCoinsFragment extends Fragment implements ILongTapObserver
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.my_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
@@ -80,11 +87,43 @@ public class MyCoinsFragment extends Fragment implements ILongTapObserver
     public void update(Coin coin)
     {
         coins.add(coin);
+        addCoinToPreferences(coin);
+        updateView();
+    }
+
+    @Override
+    public void update(List<Coin> coins)
+    {
+        this.coins = getCoinsFromPreferences(coins);
         updateView();
     }
 
     private void updateView()
     {
         listView.setAdapter(new ListAdapter(app, coins));
+    }
+
+    private void addCoinToPreferences(Coin coin)
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(coin.id, coin.id);
+        editor.apply();
+    }
+
+    private List<Coin> getCoinsFromPreferences(List<Coin> allCoins)
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        List<Coin> selectedCoins = new ArrayList<>();
+        String defaultValue = "not_found";
+        for(Coin coin : allCoins)
+        {
+            String id = preferences.getString(coin.id, defaultValue);
+            if(!Objects.equals(id, defaultValue))
+            {
+                selectedCoins.add(coin);
+            }
+        }
+        return selectedCoins;
     }
 }

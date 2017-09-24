@@ -18,6 +18,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
+import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
@@ -36,6 +37,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     private List<Coin> coins;
 
     private List<ILongTapObserver> tapObservers;
+    private List<IDataChangedObserver> dataChangedObservers;
 
     public static AllCoinsFragment newInstance(String title, Application app)
     {
@@ -44,6 +46,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         fragment.title = title;
         fragment.app = app;
         fragment.tapObservers = new ArrayList<>();
+        fragment.dataChangedObservers = new ArrayList<>();
 
         return fragment;
     }
@@ -150,6 +153,11 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
 
         listView.setAdapter(new ListAdapter(app, coins));
         swipeView.setRefreshing(false);
+
+        for(IDataChangedObserver observer : dataChangedObservers)
+        {
+            observer.update(coins);
+        }
     }
 
     public void queryCurrencies(String query)
@@ -165,9 +173,14 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         listView.setAdapter(new ListAdapter(app, queriedCoins));
     }
 
-    public void addObserver(ILongTapObserver observer)
+    public void addLongTapObserver(ILongTapObserver observer)
     {
         tapObservers.add(observer);
+    }
+
+    public void addDataChangedObserver(IDataChangedObserver observer)
+    {
+        dataChangedObservers.add(observer);
     }
 
     public String getTitle()
