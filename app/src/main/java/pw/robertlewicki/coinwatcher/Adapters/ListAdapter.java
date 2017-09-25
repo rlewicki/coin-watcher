@@ -37,8 +37,6 @@ public class ListAdapter extends BaseAdapter
     Drawable greenArrow;
     @BindDrawable(R.drawable.ic_arrow_lose_red_24dp)
     Drawable redArrow;
-    @BindDrawable(R.drawable.btc)
-    Drawable bitcoinIcon;
 
     @BindColor(R.color.gain)
     int gainColor;
