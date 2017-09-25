@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
+import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
@@ -39,7 +40,10 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     private List<ILongTapObserver> tapObservers;
     private List<IDataChangedObserver> dataChangedObservers;
 
-    public static AllCoinsFragment newInstance(String title, Application app)
+    private IFileStorageHandler fileStorageHandler;
+
+    public static AllCoinsFragment newInstance(
+            String title, Application app, IFileStorageHandler internalStorageHandler)
     {
         AllCoinsFragment fragment = new AllCoinsFragment();
 
@@ -47,6 +51,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         fragment.app = app;
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
+        fragment.fileStorageHandler = internalStorageHandler;
 
         return fragment;
     }
@@ -63,7 +68,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             @Override
             public void onRefresh()
             {
-                new CoinGetter(self).execute();
+                new CoinGetter(self, fileStorageHandler).execute();
             }
         });
 
@@ -79,7 +84,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             public void run()
             {
                 swipeView.setRefreshing(true);
-                new CoinGetter(self).execute();
+                new CoinGetter(self, fileStorageHandler).execute();
             }
         });
 
