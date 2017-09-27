@@ -53,8 +53,11 @@ public class ListAdapter extends BaseAdapter
         Context context = app.getApplicationContext();
         for(Coin coin : coins)
         {
+            String path = String
+                    .format("ic_%s", coin.id.toLowerCase())
+                    .replace('-', '_');
             coin.drawableId = context.getResources().getIdentifier(
-                    coin.symbol.toLowerCase(), "drawable", context.getPackageName());
+                    path, "drawable", context.getPackageName());
         }
     }
 
