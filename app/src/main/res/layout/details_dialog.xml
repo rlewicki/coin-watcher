@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/rankLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/rank"/>
 
         <TextView
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/fullNameLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/full_name"/>
 
         <TextView
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/priceUsdLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/price_usd"/>
 
         <TextView
@@ -44,7 +44,7 @@
 
         <TextView
             android:id="@+id/dailyVolumeUsdLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/volume_24h"/>
 
         <TextView
@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/marketCapUsdLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/market_cap"/>
 
         <TextView
@@ -64,7 +64,7 @@
 
         <TextView
             android:id="@+id/availableSupplyLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/available_supply"/>
 
         <TextView
@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/totalSupplyLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/total_supply"/>
 
         <TextView
@@ -84,7 +84,7 @@
 
         <TextView
             android:id="@+id/lastUpdateTimeLabel"
-            style="@style/ModalTextTheme"
+            style="@style/ModalLabelTextTheme"
             android:text="@string/last_updated"/>
 
         <TextView

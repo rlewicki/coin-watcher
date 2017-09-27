@@ -26,4 +26,13 @@
         <item name="android:layout_height">36dp</item>
     </style>
 
+    <style name="ModalLabelTextTheme">
+        <item name="android:layout_gravity">fill_horizontal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:textColor">#212121</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
