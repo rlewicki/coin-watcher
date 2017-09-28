@@ -1,7 +1,9 @@
 package pw.robertlewicki.coinwatcher.Utils;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
@@ -15,7 +17,6 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
     private IFileStorageHandler fileStorageHandler;
 
     private final String dataStorageFilename = "coin_data";
-    private final int updateInterval = 300;
 
     public CoinGetter(
             IFragmentUpdater fragmentUpdater, IFileStorageHandler internalStorageHandler)
@@ -36,13 +37,7 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
         HttpGetter httpGetter = new HttpGetter();
         JsonParser jsonParser = new JsonParser();
 
-        long currentTime = System.currentTimeMillis() / 1000L;
-        boolean shouldFetchNewData = false;
-        long timestamp = fileStorageHandler.loadFromSharedPreferences("timestamp");
-        if(timestamp == -1 ||timestamp + updateInterval < currentTime)
-        {
-            shouldFetchNewData = true;
-        }
+        boolean shouldFetchNewData = Timer.shouldReloadData(fileStorageHandler);
 
         try
         {
@@ -51,14 +46,21 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
             {
                 response = httpGetter.getResponse("https://api.coinmarketcap.com/v1/ticker/");
                 fileStorageHandler.saveToFile(dataStorageFilename, response);
-                fileStorageHandler.saveToSharedPreferences("timestamp", currentTime);
+                return jsonParser.stringToListOfObjects(response, Coin.class);
             }
             else
             {
-                response = fileStorageHandler.loadFromFile(dataStorageFilename);
+                if(fragmentUpdater.isEmpty())
+                {
+                    response = fileStorageHandler.loadFromFile(dataStorageFilename);
+                    return jsonParser.stringToListOfObjects(response, Coin.class);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            List<Coin> coins = jsonParser.stringToListOfObjects(response, Coin.class);
-            return coins;
+
         }
         catch(Exception e)
         {
@@ -74,9 +76,13 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
     }
 
     @Override
-    protected void onPostExecute(List<Coin> data)
+    protected void onPostExecute(@Nullable List<Coin> data)
     {
         super.onPostExecute(data);
-        fragmentUpdater.update(data);
+        fragmentUpdater.stopSpinAnimation();
+        if(data != null)
+        {
+            fragmentUpdater.update(data);
+        }
     }
 }

@@ -49,6 +49,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
 
         fragment.title = title;
         fragment.app = app;
+        fragment.coins = new ArrayList<>();
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
         fragment.fileStorageHandler = internalStorageHandler;
@@ -157,12 +158,23 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         this.coins = coins;
 
         listView.setAdapter(new ListAdapter(app, coins));
-        swipeView.setRefreshing(false);
 
         for(IDataChangedObserver observer : dataChangedObservers)
         {
             observer.update(coins);
         }
+    }
+
+    @Override
+    public void stopSpinAnimation()
+    {
+        swipeView.setRefreshing(false);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return coins.isEmpty();
     }
 
     public void queryCurrencies(String query)

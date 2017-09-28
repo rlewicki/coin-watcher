@@ -7,4 +7,6 @@ import pw.robertlewicki.coinwatcher.Models.Coin;
 public interface IFragmentUpdater
 {
     void update(List<Coin> coins);
+    void stopSpinAnimation();
+    boolean isEmpty();
 }
