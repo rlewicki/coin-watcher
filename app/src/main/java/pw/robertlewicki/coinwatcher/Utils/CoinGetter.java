@@ -8,21 +8,26 @@ import java.util.List;
 
 import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
 import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
+import pw.robertlewicki.coinwatcher.Misc.ResponseStatus;
 import pw.robertlewicki.coinwatcher.Models.Coin;
+import pw.robertlewicki.coinwatcher.Models.Response;
 
-public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
+public class CoinGetter extends AsyncTask<String, Void, Response>
 {
-
     private IFragmentUpdater fragmentUpdater;
     private IFileStorageHandler fileStorageHandler;
+    private ConnectionChecker connectionChecker;
 
     private final String dataStorageFilename = "coin_data";
 
     public CoinGetter(
-            IFragmentUpdater fragmentUpdater, IFileStorageHandler internalStorageHandler)
+            IFragmentUpdater fragmentUpdater,
+            IFileStorageHandler internalStorageHandler,
+            ConnectionChecker connectionChecker)
     {
         this.fragmentUpdater = fragmentUpdater;
         this.fileStorageHandler = internalStorageHandler;
+        this.connectionChecker = connectionChecker;
     }
 
     @Override
@@ -32,8 +37,9 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
     }
 
     @Override
-    protected List<Coin> doInBackground(String[] params)
+    protected Response doInBackground(String[] params)
     {
+        final String API_URL = "https://api.coinmarketcap.com/v1/ticker/";
         HttpGetter httpGetter = new HttpGetter();
         JsonParser jsonParser = new JsonParser();
 
@@ -44,20 +50,25 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
             String response;
             if(shouldFetchNewData)
             {
-                response = httpGetter.getResponse("https://api.coinmarketcap.com/v1/ticker/");
-                fileStorageHandler.saveToFile(dataStorageFilename, response);
-                return jsonParser.stringToListOfObjects(response, Coin.class);
+                if(connectionChecker.isConnected())
+                {
+                    response = httpGetter.getResponse(API_URL);
+                    fileStorageHandler.saveToFile(dataStorageFilename, response);
+                    List<Coin> coins = jsonParser.stringToListOfObjects(response, Coin.class);
+                    return new Response(coins, ResponseStatus.FETCHED_NEW_DATA);
+                }
+                else
+                {
+                    return new Response(null, ResponseStatus.NO_CONNECTION);
+                }
             }
             else
             {
                 if(fragmentUpdater.isEmpty())
                 {
                     response = fileStorageHandler.loadFromFile(dataStorageFilename);
-                    return jsonParser.stringToListOfObjects(response, Coin.class);
-                }
-                else
-                {
-                    return null;
+                    List<Coin> coins =  jsonParser.stringToListOfObjects(response, Coin.class);
+                    return new Response(coins, ResponseStatus.FETCHED_OLD_DATA);
                 }
             }
 
@@ -66,7 +77,7 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
         {
             e.printStackTrace();
         }
-        return null;
+        return new Response(null, ResponseStatus.NOTHING);
     }
 
     @Override
@@ -76,10 +87,9 @@ public class CoinGetter extends AsyncTask<String, Void, List<Coin>>
     }
 
     @Override
-    protected void onPostExecute(@Nullable List<Coin> data)
+    protected void onPostExecute(Response data)
     {
         super.onPostExecute(data);
-        fragmentUpdater.stopSpinAnimation();
         if(data != null)
         {
             fragmentUpdater.update(data);

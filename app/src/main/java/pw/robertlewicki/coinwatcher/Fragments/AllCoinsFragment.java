@@ -2,7 +2,9 @@ package pw.robertlewicki.coinwatcher.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,8 +26,10 @@ import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
+import pw.robertlewicki.coinwatcher.Models.Response;
 import pw.robertlewicki.coinwatcher.R;
 import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
+import pw.robertlewicki.coinwatcher.Utils.ConnectionChecker;
 
 public class AllCoinsFragment extends Fragment implements IFragmentUpdater
 {
@@ -41,6 +45,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     private List<IDataChangedObserver> dataChangedObservers;
 
     private IFileStorageHandler fileStorageHandler;
+    private ConnectionChecker connectionChecker;
 
     public static AllCoinsFragment newInstance(
             String title, Application app, IFileStorageHandler internalStorageHandler)
@@ -53,6 +58,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
         fragment.fileStorageHandler = internalStorageHandler;
+        fragment.connectionChecker = new ConnectionChecker(app);
 
         return fragment;
     }
@@ -69,7 +75,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             @Override
             public void onRefresh()
             {
-                new CoinGetter(self, fileStorageHandler).execute();
+                new CoinGetter(self, fileStorageHandler, connectionChecker).execute();
             }
         });
 
@@ -85,7 +91,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             public void run()
             {
                 swipeView.setRefreshing(true);
-                new CoinGetter(self, fileStorageHandler).execute();
+                new CoinGetter(self, fileStorageHandler, connectionChecker).execute();
             }
         });
 
@@ -153,10 +159,25 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     }
 
     @Override
-    public void update(List<Coin> coins)
+    public void update(Response data)
     {
-        this.coins = coins;
+        swipeView.setRefreshing(false);
+        switch(data.status)
+        {
+            case NO_CONNECTION:
+                displayNoConnectionDialog();
+                return;
+            case FETCHED_NEW_DATA:
+                long currentTime = System.currentTimeMillis() / 1000L;
+                fileStorageHandler.saveToSharedPreferences("timestamp", currentTime);
+                break;
+            case FETCHED_OLD_DATA:
+                break;
+            case NOTHING:
+                return;
+        }
 
+        this.coins = data.coins;
         listView.setAdapter(new ListAdapter(app, coins));
 
         for(IDataChangedObserver observer : dataChangedObservers)
@@ -165,10 +186,23 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         }
     }
 
-    @Override
-    public void stopSpinAnimation()
+    public void displayNoConnectionDialog()
     {
-        swipeView.setRefreshing(false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder
+                .setMessage("Internet connection required")
+                .setPositiveButton("Quit", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        getActivity().finish();
+                        System.exit(0);
+                    }
+                })
+                .create()
+                .show();
     }
 
     @Override

@@ -10,11 +10,6 @@ public class Timer
 
         long currentTime = System.currentTimeMillis() / 1000L;
         long timestamp = fileStorageHandler.loadFromSharedPreferences("timestamp");
-        if(timestamp == -1 ||timestamp + updateInterval < currentTime)
-        {
-            fileStorageHandler.saveToSharedPreferences("timestamp", currentTime);
-            return true;
-        }
-        return false;
+        return timestamp == -1 ||timestamp + updateInterval < currentTime;
     }
 }
