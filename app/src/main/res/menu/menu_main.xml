@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pw.robertlewicki.coinwatcher.Activities.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/action_clear_list"
+        android:orderInCategory="200"
+        android:title="@string/action_clear_list"
         app:showAsAction="never"
     />
     <item
