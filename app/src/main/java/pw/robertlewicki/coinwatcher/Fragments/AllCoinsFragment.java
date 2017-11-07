@@ -2,10 +2,9 @@ package pw.robertlewicki.coinwatcher.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Application;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -165,8 +164,8 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         switch(data.status)
         {
             case NO_CONNECTION:
-                displayNoConnectionDialog();
-                return;
+                displayNoConnectionSnackbar();
+                break;
             case FETCHED_NEW_DATA:
                 long currentTime = System.currentTimeMillis() / 1000L;
                 fileStorageHandler.saveToSharedPreferences("timestamp", currentTime);
@@ -186,22 +185,9 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         }
     }
 
-    public void displayNoConnectionDialog()
+    private void displayNoConnectionSnackbar()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder
-                .setMessage("Internet connection required")
-                .setPositiveButton("Quit", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        getActivity().finish();
-                        System.exit(0);
-                    }
-                })
-                .create()
+        Snackbar.make(getView(), "No Internet connection", Snackbar.LENGTH_LONG)
                 .show();
     }
 

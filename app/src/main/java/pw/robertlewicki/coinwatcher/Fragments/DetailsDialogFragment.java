@@ -40,7 +40,6 @@ public class DetailsDialogFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Currency details");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
