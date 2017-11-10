@@ -1,7 +1,9 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,7 +77,51 @@ public class MyCoinsFragment
             }
         });
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                final Coin selectedCoin = coins.get(position);
+
+                builder
+                        .setMessage(String.format(
+                                "Do you want to remove %s from your list?", selectedCoin.currencyName))
+                        .setPositiveButton("Proceed", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                coins.remove(selectedCoin);
+                                removeCoinFromPreferences(selectedCoin);
+                                updateView();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.dismiss();
+                            }
+                        })
+                        .create()
+                        .show();
+
+                return true;
+            }
+        });
+
         return rootView;
+    }
+
+    public void clearWatchList()
+    {
+        removeCoinsFromPreferences(coins);
+        coins.clear();
+        updateView();
     }
 
     public String getTitle()
@@ -108,6 +154,25 @@ public class MyCoinsFragment
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(coin.id, coin.id);
+        editor.apply();
+    }
+
+    private void removeCoinFromPreferences(Coin coin)
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(coin.id);
+        editor.apply();
+    }
+
+    private void removeCoinsFromPreferences(List<Coin> coins)
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences.Editor editor = preferences.edit();
+        for(Coin coin : coins)
+        {
+            editor.remove(coin.id);
+        }
         editor.apply();
     }
 

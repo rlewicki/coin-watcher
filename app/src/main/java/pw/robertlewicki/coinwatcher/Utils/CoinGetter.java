@@ -59,7 +59,9 @@ public class CoinGetter extends AsyncTask<String, Void, Response>
                 }
                 else
                 {
-                    return new Response(null, ResponseStatus.NO_CONNECTION);
+                    response = fileStorageHandler.loadFromFile(dataStorageFilename);
+                    List<Coin> coins =  jsonParser.stringToListOfObjects(response, Coin.class);
+                    return new Response(coins, ResponseStatus.NO_CONNECTION);
                 }
             }
             else
@@ -78,6 +80,11 @@ public class CoinGetter extends AsyncTask<String, Void, Response>
             e.printStackTrace();
         }
         return new Response(null, ResponseStatus.NOTHING);
+    }
+
+    private void loadDataFromBackup()
+    {
+
     }
 
     @Override

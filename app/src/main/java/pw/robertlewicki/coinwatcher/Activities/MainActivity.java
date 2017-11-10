@@ -77,8 +77,9 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
     {
         int id = item.getItemId();
 
-        if(id == R.id.action_settings)
+        if(id == R.id.action_clear_list)
         {
+            sectionsPagerAdapter.clearWatchList();
             return true;
         }
         else if(id == R.id.action_search)

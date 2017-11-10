@@ -61,4 +61,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter
     {
         allCoinsFragment.queryCurrencies(query);
     }
+
+    public void clearWatchList()
+    {
+        myCoinsFragment.clearWatchList();
+    }
 }
