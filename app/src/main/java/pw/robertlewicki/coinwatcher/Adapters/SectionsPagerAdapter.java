@@ -5,38 +5,65 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.util.ArrayList;
-
-import pw.robertlewicki.coinwatcher.Fragments.BaseFragment;
+import pw.robertlewicki.coinwatcher.Fragments.AllCoinsFragment;
+import pw.robertlewicki.coinwatcher.Fragments.MyCoinsFragment;
+import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
+    private AllCoinsFragment allCoinsFragment;
+    private MyCoinsFragment myCoinsFragment;
 
-    private ArrayList<BaseFragment> fragments = new ArrayList<>();
-
-    public SectionsPagerAdapter(FragmentManager fm, Application app)
+    public SectionsPagerAdapter(
+            FragmentManager fm, Application app, IFileStorageHandler internalStorageHandler)
     {
         super(fm);
 
-        fragments.add(BaseFragment.newInstance("All", app));
-        fragments.add(BaseFragment.newInstance("My", app));
+        allCoinsFragment = AllCoinsFragment.newInstance("All", app, internalStorageHandler);
+        myCoinsFragment = MyCoinsFragment.newInstance("My", app);
+        allCoinsFragment.addLongTapObserver(myCoinsFragment);
+        allCoinsFragment.addDataChangedObserver(myCoinsFragment);
     }
 
     @Override
     public Fragment getItem(int position)
     {
-        return fragments.get(position);
+        switch(position)
+        {
+            case 0:
+                return allCoinsFragment;
+            case 1:
+                return myCoinsFragment;
+        }
+        return null;
     }
 
     @Override
     public int getCount()
     {
-        return fragments.size();
+        return 2;
     }
 
     @Override
     public CharSequence getPageTitle(int position)
     {
-        return fragments.get(position).getTitle();
+        switch(position)
+        {
+            case 0:
+                return allCoinsFragment.getTitle();
+            case 1:
+                return myCoinsFragment.getTitle();
+        }
+        return "";
+    }
+
+    public void queryCurrencies(String query)
+    {
+        allCoinsFragment.queryCurrencies(query);
+    }
+
+    public void clearWatchList()
+    {
+        myCoinsFragment.clearWatchList();
     }
 }

@@ -24,6 +24,8 @@ public class Coin
     public String availableSupply;
     @JsonProperty("total_supply")
     public String totalSupply;
+    @JsonProperty("max_supply")
+    public String maxSupply;
     @JsonProperty("percent_change_1h")
     public String hourlyPercentChange;
     @JsonProperty("percent_change_24h")
@@ -32,4 +34,6 @@ public class Coin
     public String weeklyPercentChange;
     @JsonProperty("last_updated")
     public String lastUpdated;
+
+    public int drawableId;
 }

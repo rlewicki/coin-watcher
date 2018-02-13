@@ -1,10 +1,9 @@
 package pw.robertlewicki.coinwatcher.Interfaces;
 
-import java.util.List;
-
-import pw.robertlewicki.coinwatcher.Models.Coin;
+import pw.robertlewicki.coinwatcher.Models.Response;
 
 public interface IFragmentUpdater
 {
-    void update(List<Coin> coins);
+    void update(Response data);
+    boolean isEmpty();
 }
