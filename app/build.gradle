@@ -22,6 +22,10 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE'
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
