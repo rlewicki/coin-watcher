@@ -1,4 +1,4 @@
-package pw.robertlewicki.coinwatcher.Activities;
+package pw.robertlewicki.coinwatcher;
 
 import android.content.Context;
 import android.content.SharedPreferences;
