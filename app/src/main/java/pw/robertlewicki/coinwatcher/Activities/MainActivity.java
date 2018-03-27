@@ -1,4 +1,4 @@
-package pw.robertlewicki.coinwatcher;
+package pw.robertlewicki.coinwatcher.Activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import dagger.android.AndroidInjection;
 import pw.robertlewicki.coinwatcher.Adapters.SectionsPagerAdapter;
 import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.R;
@@ -26,11 +27,12 @@ import pw.robertlewicki.coinwatcher.R;
 public class MainActivity extends AppCompatActivity implements IFileStorageHandler
 {
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        AndroidInjection.inject(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         sectionsPagerAdapter = new SectionsPagerAdapter(
                 getSupportFragmentManager(), getApplication(), this);
 
-        viewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
