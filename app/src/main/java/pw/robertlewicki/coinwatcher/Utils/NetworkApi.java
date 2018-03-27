@@ -20,7 +20,8 @@ public class NetworkApi
 
     public String getResponseFrom(String url) throws IOException, RuntimeException
     {
-        Request request = new Request().Builder()
+        Request request = new Request
+                .Builder()
                 .url(url)
                 .build();
 
@@ -31,7 +32,6 @@ public class NetworkApi
         if(response.code() != 200)
         {
             throw new RuntimeException(String.format("Http response code %d.", response.code()));
-            return "";
         }
 
         return response.body().string();
