@@ -26,9 +26,10 @@ import dagger.android.AndroidInjection;
 import pw.robertlewicki.coinwatcher.Adapters.SectionsPagerAdapter;
 import pw.robertlewicki.coinwatcher.ChasingCoinsApi.ChasingCoins;
 import pw.robertlewicki.coinwatcher.ChasingCoinsApi.ChasingCoinsObserver;
-import pw.robertlewicki.coinwatcher.ChasingCoinsApi.CoinDetails;
+import pw.robertlewicki.coinwatcher.ChasingCoinsApi.ChasingCoinsDetailsModel;
 import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.R;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements IFileStorageHandler, ChasingCoinsObserver
 {
@@ -166,7 +167,12 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
     }
 
     @Override
-    public void coinDetailsCallback(CoinDetails coinDetails)
+    public void coinDetailsCallback(ChasingCoinsDetailsModel chasingCoinsDetailsModel)
+    {
+    }
+
+    @Override
+    public void coinLogoCallback(Response logoResponse)
     {
     }
 

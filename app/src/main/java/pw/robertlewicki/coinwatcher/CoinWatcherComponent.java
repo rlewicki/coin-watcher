@@ -10,5 +10,5 @@ import retrofit2.Retrofit;
 public interface CoinWatcherComponent extends AndroidInjector<CoinWatcherApplication>
 {
     Retrofit retrofit();
-    ChasingCoins chasingCoinsApiImpl();
+    ChasingCoins chasingCoins();
 }
