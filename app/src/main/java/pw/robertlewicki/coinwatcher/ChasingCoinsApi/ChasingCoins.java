@@ -3,6 +3,7 @@ package pw.robertlewicki.coinwatcher.ChasingCoinsApi;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import retrofit2.Call;
@@ -12,13 +13,16 @@ import retrofit2.Retrofit;
 
 public class ChasingCoins
 {
+    @Inject
+    @Named("ChasingCoins")
+    Retrofit retrofit;
+
     private ChasingCoinsService chasingCoinsService;
-    private Retrofit retrofit;
 
     @Inject
-    public ChasingCoins(Retrofit retrofit)
+    public ChasingCoins()
     {
-        this.retrofit = retrofit;
+        DaggerCoinWatcherComponent.create().inject(this);
         chasingCoinsService = retrofit.create(ChasingCoinsService.class);
     }
 
