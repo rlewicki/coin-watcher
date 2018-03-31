@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import butterknife.BindColor;
@@ -45,6 +47,8 @@ public class ListAdapter extends BaseAdapter
 
     private List<Coin> coins;
     private Application app;
+
+    private String baseUrl = "https://chasing-coins.com/api/v1/std/logo/";
 
     public ListAdapter(Application application, List<Coin> coins)
     {
@@ -112,7 +116,10 @@ public class ListAdapter extends BaseAdapter
             }
         }
 
-        coinIcon.setImageResource(coin.drawableId);
+
+        Picasso.get()
+                .load(baseUrl + coin.symbol)
+                .into(coinIcon);
 
         return newView;
     }
