@@ -1,9 +1,17 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
 version: 2
+general:
+    branches:
+        only:
+            - circle-ci
 jobs:
   build:
     working_directory: ~/code
     docker:
-      - image: circleci/android:api-27-alpha
+      - image: circleci/android:api-25-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -15,6 +23,7 @@ jobs:
 #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
+          command: sudo chmod +x ./gradlew
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
@@ -28,3 +37,6 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
+
+
