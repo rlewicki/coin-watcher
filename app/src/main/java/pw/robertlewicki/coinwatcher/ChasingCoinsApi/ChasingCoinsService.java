@@ -14,7 +14,4 @@ public interface ChasingCoinsService
 
     @GET("std/coin/{coin}")
     Call<ChasingCoinsDetailsModel> getCoinDetails(@Path("coin") String coin);
-
-    @GET("std/logo/{coin}")
-    Call getCoinLogo(@Path("coin") String coin);
 }

@@ -8,6 +8,5 @@ public interface ChasingCoinsObserver
 {
     void listedCoinsCallback(List<String> listedCoins);
     void coinDetailsCallback(ChasingCoinsDetailsModel chasingCoinsDetailsModel);
-    void coinLogoCallback(Response logoResponse);
     void fetchingErrorCallback(Throwable t);
 }

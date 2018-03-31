@@ -67,24 +67,4 @@ public class ChasingCoins
             }
         });
     }
-
-    public void getCoinLogo(final ChasingCoinsObserver observer, String coinName)
-    {
-        Call request = chasingCoinsService.getCoinLogo(coinName);
-
-        request.enqueue(new Callback()
-        {
-            @Override
-            public void onResponse(Call call, Response response)
-            {
-                observer.coinLogoCallback(response);
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t)
-            {
-                observer.fetchingErrorCallback(t);
-            }
-        });
-    }
 }
