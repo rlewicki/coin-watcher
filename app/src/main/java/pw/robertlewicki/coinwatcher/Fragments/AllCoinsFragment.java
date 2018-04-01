@@ -156,12 +156,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         return rootView;
     }
 
-    private void displayNoConnectionSnackbar()
-    {
-        Snackbar.make(getView(), "No Internet connection", Snackbar.LENGTH_LONG)
-                .show();
-    }
-
     public void queryCurrencies(String query)
     {
         List<CoinMarketCapDetailsModel> queriedCoins = new ArrayList<>();
