@@ -206,6 +206,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         swipeView.setRefreshing(false);
         listView.setAdapter(new ListAdapter(app, listedCoins));
 
+        this.listedCoins = listedCoins;
+
         for(IDataChangedObserver observer : dataChangedObservers)
         {
             observer.update(listedCoins);
