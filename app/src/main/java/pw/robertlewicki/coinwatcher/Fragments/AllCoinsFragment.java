@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.support.AndroidSupportInjection;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
@@ -58,6 +59,13 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         fragment.dataChangedObservers = new ArrayList<>();
 
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        AndroidSupportInjection.inject(this);
+        super.onAttach(activity);
     }
 
     @Override
