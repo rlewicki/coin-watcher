@@ -18,6 +18,7 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
@@ -45,36 +46,27 @@ public class ListAdapter extends BaseAdapter
     @BindColor(R.color.lose)
     int loseColor;
 
-    private List<Coin> coins;
+    private List<CoinMarketCapDetailsModel> listedCoins;
     private Application app;
 
     private String baseUrl = "https://chasing-coins.com/api/v1/std/logo/";
 
-    public ListAdapter(Application application, List<Coin> coins)
+    public ListAdapter(Application application, List<CoinMarketCapDetailsModel> listedCoins)
     {
         this.app = application;
-        this.coins = coins;
-        Context context = app.getApplicationContext();
-        for(Coin coin : coins)
-        {
-            String path = String
-                    .format("ic_%s", coin.id.toLowerCase())
-                    .replace('-', '_');
-            coin.drawableId = context.getResources().getIdentifier(
-                    path, "drawable", context.getPackageName());
-        }
+        this.listedCoins = listedCoins;
     }
 
     @Override
     public int getCount()
     {
-        return coins.size();
+        return listedCoins.size();
     }
 
     @Override
     public Object getItem(int position)
     {
-        return coins.get(position);
+        return listedCoins.get(position);
     }
 
     @Override
@@ -95,7 +87,7 @@ public class ListAdapter extends BaseAdapter
 
         ButterKnife.bind(this, newView);
 
-        Coin coin = coins.get(position);
+        CoinMarketCapDetailsModel coin = listedCoins.get(position);
 
         coinName.setText(coin.symbol);
         coinValue.setText(String.format("$%s", coin.priceUsd));

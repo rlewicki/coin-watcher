@@ -1,8 +1,8 @@
 package pw.robertlewicki.coinwatcher.Interfaces;
 
-import pw.robertlewicki.coinwatcher.Models.Coin;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 
 public interface ILongTapObserver
 {
-    void update(Coin coin);
+    void update(CoinMarketCapDetailsModel coin);
 }

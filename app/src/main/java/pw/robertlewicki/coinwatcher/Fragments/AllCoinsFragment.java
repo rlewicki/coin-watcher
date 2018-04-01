@@ -16,29 +16,37 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
+import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
-import pw.robertlewicki.coinwatcher.Interfaces.IFragmentUpdater;
 import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.Models.Response;
 import pw.robertlewicki.coinwatcher.R;
-import pw.robertlewicki.coinwatcher.Utils.CoinGetter;
 import pw.robertlewicki.coinwatcher.Utils.ConnectionChecker;
 
-public class AllCoinsFragment extends Fragment implements IFragmentUpdater
+public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
 {
-    private final IFragmentUpdater self = this;
+    private final AllCoinsFragment self = this;
     @BindView(R.id.SwipeView) SwipeRefreshLayout swipeView;
     @BindView(R.id.CoinListView) ListView listView;
 
+    @Inject
+    CoinMarketCap coinMarketCap;
+
     private String title;
     private Application app;
-    private List<Coin> coins;
+    private List<CoinMarketCapDetailsModel> listedCoins;
 
     private List<ILongTapObserver> tapObservers;
     private List<IDataChangedObserver> dataChangedObservers;
@@ -53,7 +61,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
 
         fragment.title = title;
         fragment.app = app;
-        fragment.coins = new ArrayList<>();
+        fragment.listedCoins = new ArrayList<>();
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
         fragment.fileStorageHandler = internalStorageHandler;
@@ -65,16 +73,17 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        DaggerCoinWatcherComponent.create().inject(this);
+
         View rootView = inflater.inflate(R.layout.all_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
-
             @Override
             public void onRefresh()
             {
-                new CoinGetter(self, fileStorageHandler, connectionChecker).execute();
+                coinMarketCap.listAllCoins(self);
             }
         });
 
@@ -90,7 +99,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             public void run()
             {
                 swipeView.setRefreshing(true);
-                new CoinGetter(self, fileStorageHandler, connectionChecker).execute();
+                coinMarketCap.listAllCoins(self);
             }
         });
 
@@ -100,7 +109,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Bundle data = new Bundle();
-                Coin coin = coins.get(position);
+                CoinMarketCapDetailsModel coin = listedCoins.get(position);
 
                 data.putString(BundleKeys.RANK, coin.rank);
                 data.putString(BundleKeys.FULL_NAME, coin.currencyName);
@@ -124,7 +133,7 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                final Coin selectedCoin = coins.get(position);
+                final CoinMarketCapDetailsModel selectedCoin = listedCoins.get(position);
 
                 builder
                         .setMessage(String.format("Do you want to add %s to your list?", selectedCoin.currencyName))
@@ -157,50 +166,16 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
         return rootView;
     }
 
-    @Override
-    public void update(Response data)
-    {
-        swipeView.setRefreshing(false);
-        switch(data.status)
-        {
-            case NO_CONNECTION:
-                displayNoConnectionSnackbar();
-                break;
-            case FETCHED_NEW_DATA:
-                long currentTime = System.currentTimeMillis() / 1000L;
-                fileStorageHandler.saveToSharedPreferences("timestamp", currentTime);
-                break;
-            case FETCHED_OLD_DATA:
-                break;
-            case NOTHING:
-                return;
-        }
-
-        this.coins = data.coins;
-        listView.setAdapter(new ListAdapter(app, coins));
-
-        for(IDataChangedObserver observer : dataChangedObservers)
-        {
-            observer.update(coins);
-        }
-    }
-
     private void displayNoConnectionSnackbar()
     {
         Snackbar.make(getView(), "No Internet connection", Snackbar.LENGTH_LONG)
                 .show();
     }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return coins.isEmpty();
-    }
-
     public void queryCurrencies(String query)
     {
-        List<Coin> queriedCoins = new ArrayList<>();
-        for(Coin coin : coins)
+        List<CoinMarketCapDetailsModel> queriedCoins = new ArrayList<>();
+        for(CoinMarketCapDetailsModel coin : listedCoins)
         {
             if(coin.symbol.contains(query.toUpperCase()))
             {
@@ -223,5 +198,42 @@ public class AllCoinsFragment extends Fragment implements IFragmentUpdater
     public String getTitle()
     {
         return title;
+    }
+
+    @Override
+    public void listedCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
+    {
+        swipeView.setRefreshing(false);
+        listView.setAdapter(new ListAdapter(app, listedCoins));
+
+        for(IDataChangedObserver observer : dataChangedObservers)
+        {
+            observer.update(listedCoins);
+        }
+    }
+
+    @Override
+    public void listedLimitedAmountOfCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
+    {
+        swipeView.setRefreshing(false);
+        listView.setAdapter(new ListAdapter(app, listedCoins));
+    }
+
+    @Override
+    public void specificCoinDetailsCallback(CoinMarketCapDetailsModel coinDetails)
+    {
+
+    }
+
+    @Override
+    public void globalMarketDataCallback(GlobalMarketDataModel marketData)
+    {
+
+    }
+
+    @Override
+    public void fetchingErrorCallback(Throwable t)
+    {
+
     }
 }

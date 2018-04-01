@@ -20,6 +20,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
@@ -34,7 +35,7 @@ public class MyCoinsFragment
 
     private String title;
     private Application app;
-    private List<Coin> coins;
+    private List<CoinMarketCapDetailsModel> coins;
 
     public static MyCoinsFragment newInstance(String title, Application app)
     {
@@ -60,7 +61,7 @@ public class MyCoinsFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Bundle data = new Bundle();
-                Coin coin = coins.get(position);
+                CoinMarketCapDetailsModel coin = coins.get(position);
 
                 data.putString(BundleKeys.RANK, coin.rank);
                 data.putString(BundleKeys.FULL_NAME, coin.currencyName);
@@ -84,7 +85,7 @@ public class MyCoinsFragment
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                final Coin selectedCoin = coins.get(position);
+                final CoinMarketCapDetailsModel selectedCoin = coins.get(position);
 
                 builder
                         .setMessage(String.format(
@@ -130,7 +131,7 @@ public class MyCoinsFragment
     }
 
     @Override
-    public void update(Coin coin)
+    public void update(CoinMarketCapDetailsModel coin)
     {
         coins.add(coin);
         addCoinToPreferences(coin);
@@ -138,7 +139,7 @@ public class MyCoinsFragment
     }
 
     @Override
-    public void update(List<Coin> coins)
+    public void update(List<CoinMarketCapDetailsModel> coins)
     {
         this.coins = getCoinsFromPreferences(coins);
         updateView();
@@ -149,7 +150,7 @@ public class MyCoinsFragment
         listView.setAdapter(new ListAdapter(app, coins));
     }
 
-    private void addCoinToPreferences(Coin coin)
+    private void addCoinToPreferences(CoinMarketCapDetailsModel coin)
     {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
         SharedPreferences.Editor editor = preferences.edit();
@@ -157,7 +158,7 @@ public class MyCoinsFragment
         editor.apply();
     }
 
-    private void removeCoinFromPreferences(Coin coin)
+    private void removeCoinFromPreferences(CoinMarketCapDetailsModel coin)
     {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
         SharedPreferences.Editor editor = preferences.edit();
@@ -165,23 +166,23 @@ public class MyCoinsFragment
         editor.apply();
     }
 
-    private void removeCoinsFromPreferences(List<Coin> coins)
+    private void removeCoinsFromPreferences(List<CoinMarketCapDetailsModel> coins)
     {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
         SharedPreferences.Editor editor = preferences.edit();
-        for(Coin coin : coins)
+        for(CoinMarketCapDetailsModel coin : coins)
         {
             editor.remove(coin.id);
         }
         editor.apply();
     }
 
-    private List<Coin> getCoinsFromPreferences(List<Coin> allCoins)
+    private List<CoinMarketCapDetailsModel> getCoinsFromPreferences(List<CoinMarketCapDetailsModel> allCoins)
     {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
-        List<Coin> selectedCoins = new ArrayList<>();
+        List<CoinMarketCapDetailsModel> selectedCoins = new ArrayList<>();
         String defaultValue = "not_found";
-        for(Coin coin : allCoins)
+        for(CoinMarketCapDetailsModel coin : allCoins)
         {
             String id = preferences.getString(coin.id, defaultValue);
             if(!Objects.equals(id, defaultValue))
