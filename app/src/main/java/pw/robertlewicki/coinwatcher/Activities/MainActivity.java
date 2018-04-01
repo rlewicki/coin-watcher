@@ -34,19 +34,8 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         AndroidInjection.inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        sectionsPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), getApplication(), this);
-
-        ViewPager viewPager = findViewById(R.id.container);
-        viewPager.setAdapter(sectionsPagerAdapter);
-
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        setupUi();
     }
 
     @Override
@@ -149,5 +138,22 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         long value = preferences.getLong(key, -1);
         return value;
+    }
+
+    private void setupUi()
+    {
+        setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(
+                getSupportFragmentManager(), getApplication(), this);
+
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
