@@ -19,7 +19,6 @@ import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
-import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
 public class ListAdapter extends BaseAdapter

@@ -21,10 +21,9 @@ import java.io.InputStreamReader;
 
 import dagger.android.AndroidInjection;
 import pw.robertlewicki.coinwatcher.Adapters.SectionsPagerAdapter;
-import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.R;
 
-public class MainActivity extends AppCompatActivity implements IFileStorageHandler
+public class MainActivity extends AppCompatActivity
 {
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -81,65 +80,6 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void saveToFile(String filepath, String data)
-    {
-        try
-        {
-            FileOutputStream file = openFileOutput(filepath, Context.MODE_PRIVATE);
-            file.write(data.getBytes());
-            file.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public String loadFromFile(String filepath)
-    {
-        try
-        {
-            String fileContent;
-
-            FileInputStream file = openFileInput(filepath);
-            InputStreamReader inputStreamReader = new InputStreamReader(file);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuilder stringBuilder = new StringBuilder();
-            String buffer;
-            while((buffer = bufferedReader.readLine()) != null)
-            {
-                stringBuilder.append(buffer);
-            }
-            fileContent = stringBuilder.toString();
-            return fileContent;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    @Override
-    public void saveToSharedPreferences(String key, long value)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(key, value);
-        editor.apply();
-    }
-
-    @Override
-    public long loadFromSharedPreferences(String key)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        long value = preferences.getLong(key, -1);
-        return value;
-    }
-
     private void setupUi()
     {
         setContentView(R.layout.activity_main);
@@ -148,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         setSupportActionBar(toolbar);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), getApplication(), this);
+                getSupportFragmentManager(), getApplication());
 
         ViewPager viewPager = findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);

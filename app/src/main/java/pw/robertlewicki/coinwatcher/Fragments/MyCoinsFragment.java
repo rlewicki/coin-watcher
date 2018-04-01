@@ -24,7 +24,6 @@ import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
-import pw.robertlewicki.coinwatcher.Models.Coin;
 import pw.robertlewicki.coinwatcher.R;
 
 public class MyCoinsFragment

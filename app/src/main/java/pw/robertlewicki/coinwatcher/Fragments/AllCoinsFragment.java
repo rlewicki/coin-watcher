@@ -27,13 +27,9 @@ import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
 import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
-import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
-import pw.robertlewicki.coinwatcher.Models.Coin;
-import pw.robertlewicki.coinwatcher.Models.Response;
 import pw.robertlewicki.coinwatcher.R;
-import pw.robertlewicki.coinwatcher.Utils.ConnectionChecker;
 
 public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
 {
@@ -51,11 +47,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     private List<ILongTapObserver> tapObservers;
     private List<IDataChangedObserver> dataChangedObservers;
 
-    private IFileStorageHandler fileStorageHandler;
-    private ConnectionChecker connectionChecker;
-
-    public static AllCoinsFragment newInstance(
-            String title, Application app, IFileStorageHandler internalStorageHandler)
+    public static AllCoinsFragment newInstance(String title, Application app)
     {
         AllCoinsFragment fragment = new AllCoinsFragment();
 
@@ -64,8 +56,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         fragment.listedCoins = new ArrayList<>();
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
-        fragment.fileStorageHandler = internalStorageHandler;
-        fragment.connectionChecker = new ConnectionChecker(app);
 
         return fragment;
     }

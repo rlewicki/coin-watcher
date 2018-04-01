@@ -31,7 +31,6 @@ public class CoinMarketCap
     public void listAllCoins(final CoinMarketCapObserver observer)
     {
         Call<List<CoinMarketCapDetailsModel>> request = coinMarketCapService.listAllCoins();
-
         request.enqueue(new Callback<List<CoinMarketCapDetailsModel>>()
         {
             @Override

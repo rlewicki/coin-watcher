@@ -7,19 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import pw.robertlewicki.coinwatcher.Fragments.AllCoinsFragment;
 import pw.robertlewicki.coinwatcher.Fragments.MyCoinsFragment;
-import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter
 {
     private AllCoinsFragment allCoinsFragment;
     private MyCoinsFragment myCoinsFragment;
 
-    public SectionsPagerAdapter(
-            FragmentManager fm, Application app, IFileStorageHandler internalStorageHandler)
+    public SectionsPagerAdapter(FragmentManager fm, Application app)
     {
         super(fm);
 
-        allCoinsFragment = AllCoinsFragment.newInstance("All", app, internalStorageHandler);
+        allCoinsFragment = AllCoinsFragment.newInstance("All", app);
         myCoinsFragment = MyCoinsFragment.newInstance("My", app);
         allCoinsFragment.addLongTapObserver(myCoinsFragment);
         allCoinsFragment.addDataChangedObserver(myCoinsFragment);
