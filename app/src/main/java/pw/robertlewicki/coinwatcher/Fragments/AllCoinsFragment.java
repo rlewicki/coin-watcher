@@ -1,5 +1,6 @@
 package pw.robertlewicki.coinwatcher.Fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
@@ -25,7 +26,6 @@ import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
-import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
@@ -63,8 +63,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        DaggerCoinWatcherComponent.create().inject(this);
-
         View rootView = inflater.inflate(R.layout.all_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
 

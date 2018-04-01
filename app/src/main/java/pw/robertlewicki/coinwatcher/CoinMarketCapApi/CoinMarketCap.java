@@ -5,9 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import pw.robertlewicki.coinwatcher.CoinWatcherComponent;
-import pw.robertlewicki.coinwatcher.CoinWatcherModule;
-import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -18,14 +15,9 @@ public class CoinMarketCap
     private CoinMarketCapService coinMarketCapService;
 
     @Inject
-    @Named("CoinMarketCap")
-    Retrofit retrofit;
-
-    @Inject
-    public CoinMarketCap()
+    public CoinMarketCap(CoinMarketCapService coinMarketCapService)
     {
-        DaggerCoinWatcherComponent.create().inject(this);
-        coinMarketCapService = retrofit.create(CoinMarketCapService.class);
+        this.coinMarketCapService = coinMarketCapService;
     }
 
     public void listAllCoins(final CoinMarketCapObserver observer)

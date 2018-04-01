@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import pw.robertlewicki.coinwatcher.Di.Components.DaggerCoinWatcherComponent;
+import pw.robertlewicki.coinwatcher.Di.Modules.ContextModule;
 
 public class CoinWatcherApplication extends Application implements HasActivityInjector
 {
@@ -18,7 +20,10 @@ public class CoinWatcherApplication extends Application implements HasActivityIn
     public void onCreate()
     {
         super.onCreate();
-        DaggerCoinWatcherComponent.create().inject(this);
+        DaggerCoinWatcherComponent.builder()
+                .contextModule(new ContextModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override

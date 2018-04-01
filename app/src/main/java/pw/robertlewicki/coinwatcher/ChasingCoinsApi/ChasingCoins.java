@@ -5,7 +5,6 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import pw.robertlewicki.coinwatcher.DaggerCoinWatcherComponent;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,17 +12,10 @@ import retrofit2.Retrofit;
 
 public class ChasingCoins
 {
-    @Inject
-    @Named("ChasingCoins")
-    Retrofit retrofit;
-
     private ChasingCoinsService chasingCoinsService;
 
-    @Inject
     public ChasingCoins()
     {
-        DaggerCoinWatcherComponent.create().inject(this);
-        chasingCoinsService = retrofit.create(ChasingCoinsService.class);
     }
 
     public void listAllCoins(final ChasingCoinsObserver observer)
