@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
+import es.dmoral.toasty.Toasty;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
@@ -31,6 +32,7 @@ import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
 import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.R;
+import pw.robertlewicki.coinwatcher.Utils.Utils;
 
 public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
 {
@@ -193,6 +195,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     @Override
     public void listedCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
+        DisplayPostRequestToast();
         swipeView.setRefreshing(false);
         listView.setAdapter(new ListAdapter(app, listedCoins));
 
@@ -227,5 +230,17 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     public void fetchingErrorCallback(Throwable t)
     {
 
+    }
+
+    private void DisplayPostRequestToast()
+    {
+        if(Utils.isNetworkAvailable(getContext()))
+        {
+            Toasty.success(getContext(), "New data fetched", Toast.LENGTH_SHORT, true).show();
+        }
+        else
+        {
+            Toasty.warning(getContext(), "You are in offline mode", Toast.LENGTH_SHORT, true).show();
+        }
     }
 }
