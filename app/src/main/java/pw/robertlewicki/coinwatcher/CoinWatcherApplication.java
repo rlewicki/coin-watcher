@@ -12,6 +12,7 @@ import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import pw.robertlewicki.coinwatcher.Di.Components.DaggerCoinWatcherComponent;
 import pw.robertlewicki.coinwatcher.Di.Modules.ContextModule;
+import timber.log.Timber;
 
 public class CoinWatcherApplication extends Application
         implements HasActivityInjector, HasSupportFragmentInjector
@@ -26,6 +27,8 @@ public class CoinWatcherApplication extends Application
     public void onCreate()
     {
         super.onCreate();
+
+        Timber.plant(new Timber.DebugTree());
 
         DaggerCoinWatcherComponent.builder()
                 .contextModule(new ContextModule(this))
