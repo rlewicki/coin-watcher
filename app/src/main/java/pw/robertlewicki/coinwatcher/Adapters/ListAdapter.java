@@ -32,8 +32,6 @@ public class ListAdapter extends BaseAdapter
     TextView coinValue;
     @BindView(R.id.GainArrow)
     ImageView gainArrow;
-    @BindView(R.id.CoinIcon)
-    ImageView coinIcon;
 
     @BindDrawable(R.drawable.ic_arrow_gain_green_24dp)
     Drawable greenArrow;
@@ -47,8 +45,6 @@ public class ListAdapter extends BaseAdapter
 
     private List<CoinMarketCapDetailsModel> listedCoins;
     private Application app;
-
-    private String baseUrl = "https://chasing-coins.com/api/v1/std/logo/";
 
     public ListAdapter(Application application, List<CoinMarketCapDetailsModel> listedCoins)
     {
@@ -106,11 +102,6 @@ public class ListAdapter extends BaseAdapter
                 coinPercent.setTextColor(gainColor);
             }
         }
-
-
-        Picasso.get()
-                .load(baseUrl + coin.symbol)
-                .into(coinIcon);
 
         return newView;
     }
