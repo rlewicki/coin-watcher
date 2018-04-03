@@ -132,6 +132,11 @@ public class MyCoinsFragment
     @Override
     public void update(CoinMarketCapDetailsModel coin)
     {
+        if(coins.contains(coin))
+        {
+            return;
+        }
+
         coins.add(coin);
         addCoinToPreferences(coin);
         updateView();
@@ -151,7 +156,7 @@ public class MyCoinsFragment
 
     private void addCoinToPreferences(CoinMarketCapDetailsModel coin)
     {
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(coin.id, coin.id);
         editor.apply();
@@ -159,7 +164,7 @@ public class MyCoinsFragment
 
     private void removeCoinFromPreferences(CoinMarketCapDetailsModel coin)
     {
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(coin.id);
         editor.apply();
@@ -167,7 +172,7 @@ public class MyCoinsFragment
 
     private void removeCoinsFromPreferences(List<CoinMarketCapDetailsModel> coins)
     {
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         for(CoinMarketCapDetailsModel coin : coins)
         {
@@ -178,7 +183,7 @@ public class MyCoinsFragment
 
     private List<CoinMarketCapDetailsModel> getCoinsFromPreferences(List<CoinMarketCapDetailsModel> allCoins)
     {
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_APPEND);
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         List<CoinMarketCapDetailsModel> selectedCoins = new ArrayList<>();
         String defaultValue = "not_found";
         for(CoinMarketCapDetailsModel coin : allCoins)
