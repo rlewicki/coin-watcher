@@ -1,8 +1,5 @@
 package pw.robertlewicki.coinwatcher.Activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -12,12 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import dagger.android.AndroidInjection;
 import pw.robertlewicki.coinwatcher.Adapters.SectionsPagerAdapter;
@@ -33,6 +24,7 @@ public class MainActivity extends AppCompatActivity
         AndroidInjection.inject(this);
 
         super.onCreate(savedInstanceState);
+
 
         setupUi();
     }

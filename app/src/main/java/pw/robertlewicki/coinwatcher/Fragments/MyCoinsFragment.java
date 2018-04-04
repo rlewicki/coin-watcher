@@ -54,29 +54,6 @@ public class MyCoinsFragment
         View rootView = inflater.inflate(R.layout.my_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Bundle data = new Bundle();
-                CoinMarketCapDetailsModel coin = coins.get(position);
-
-                data.putString(BundleKeys.RANK, coin.rank);
-                data.putString(BundleKeys.FULL_NAME, coin.currencyName);
-                data.putString(BundleKeys.PRICE_USD, coin.priceUsd);
-                data.putString(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
-                data.putString(BundleKeys.MARKET_CAP, coin.marketCapUsd);
-                data.putString(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
-                data.putString(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
-                data.putString(BundleKeys.LAST_UPDATE_TIME, coin.lastUpdated);
-
-                DetailsDialogFragment dialog = new DetailsDialogFragment();
-                dialog.setArguments(data);
-                dialog.show(getActivity().getFragmentManager(), "details_dialog");
-            }
-        });
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override

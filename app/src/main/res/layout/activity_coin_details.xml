@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="pw.robertlewicki.coinwatcher.Activities.CoinDetailsActivity">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/diagonal_view"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:src="@drawable/strawberry_cake"
+            android:scaleType="centerCrop"/>
+
+        <!-- Rank field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/rankLabel"
+                android:text="@string/rank"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/rankField"
+                android:text="@string/lorem_ipsum" />
+        </LinearLayout>
+
+        <!-- Full name field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/fullNameLabel"
+                android:text="@string/full_name"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/fullNameField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- USD price field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/priceUsdLabel"
+                android:text="@string/price_usd"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/priceUsdField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Daily volume field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/dailyVolumeUsdLabel"
+                android:text="@string/volume_24h"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/dailyVolumeUsdField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Market cap field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/marketCapUsdLabel"
+                android:text="@string/market_cap"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/marketCapUsdField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Available supply field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/availableSupplyLabel"
+                android:text="@string/available_supply"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/availableSupplyField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Total supply field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/totalSupplyLabel"
+                android:text="@string/total_supply"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/totalSupplyField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Last updated field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/lastUpdateTimeLabel"
+                android:text="@string/last_updated"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/lastUpdateTimeField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

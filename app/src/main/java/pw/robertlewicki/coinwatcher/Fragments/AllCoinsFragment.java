@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import es.dmoral.toasty.Toasty;
+import pw.robertlewicki.coinwatcher.Activities.CoinDetailsActivity;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
@@ -109,18 +111,18 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                 Bundle data = new Bundle();
                 CoinMarketCapDetailsModel coin = listedCoins.get(position);
 
-                data.putString(BundleKeys.RANK, coin.rank);
-                data.putString(BundleKeys.FULL_NAME, coin.currencyName);
-                data.putString(BundleKeys.PRICE_USD, coin.priceUsd);
-                data.putString(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
-                data.putString(BundleKeys.MARKET_CAP, coin.marketCapUsd);
-                data.putString(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
-                data.putString(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
-                data.putString(BundleKeys.LAST_UPDATE_TIME, coin.lastUpdated);
+                Intent intent = new Intent(getContext(), CoinDetailsActivity.class);
 
-                DetailsDialogFragment dialog = new DetailsDialogFragment();
-                dialog.setArguments(data);
-                dialog.show(getActivity().getFragmentManager(), "details_dialog");
+                intent.putExtra(BundleKeys.RANK, coin.rank);
+                intent.putExtra(BundleKeys.FULL_NAME, coin.currencyName);
+                intent.putExtra(BundleKeys.PRICE_USD, coin.priceUsd);
+                intent.putExtra(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
+                intent.putExtra(BundleKeys.MARKET_CAP, coin.marketCapUsd);
+                intent.putExtra(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
+                intent.putExtra(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
+                intent.putExtra(BundleKeys.LAST_UPDATE_TIME, coin.lastUpdated);
+
+                startActivity(intent);
             }
         });
 
