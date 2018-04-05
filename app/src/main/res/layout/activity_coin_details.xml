@@ -33,15 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/coin_logo"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:src="@drawable/strawberry_cake"
-            android:background="#000000"
-            android:elevation="6dp"
-            android:scaleType="centerCrop"/>
-
         <!-- Rank field -->
         <LinearLayout style="@style/HorizontalLayoutStyle">
             <TextView style="@style/LabelTextStyle"

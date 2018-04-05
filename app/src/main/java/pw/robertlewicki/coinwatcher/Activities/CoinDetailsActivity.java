@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 import com.lb.auto_fit_textview.AutoResizeTextView;
+import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -18,9 +19,6 @@ import pw.robertlewicki.coinwatcher.R;
 
 public class CoinDetailsActivity extends AppCompatActivity
 {
-    @BindView(R.id.coin_logo)
-    ImageView coinLogo;
-
     @BindView(R.id.rankField)
     AutoResizeTextView rankField;
     @BindView(R.id.fullNameField)
