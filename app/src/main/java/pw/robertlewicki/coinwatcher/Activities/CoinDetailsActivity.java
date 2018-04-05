@@ -3,6 +3,7 @@ package pw.robertlewicki.coinwatcher.Activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.lb.auto_fit_textview.AutoResizeTextView;
 
@@ -17,6 +18,9 @@ import pw.robertlewicki.coinwatcher.R;
 
 public class CoinDetailsActivity extends AppCompatActivity
 {
+    @BindView(R.id.coin_logo)
+    ImageView coinLogo;
+
     @BindView(R.id.rankField)
     AutoResizeTextView rankField;
     @BindView(R.id.fullNameField)
@@ -44,8 +48,11 @@ public class CoinDetailsActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
         NumberFormat.getCurrencyInstance().setMaximumFractionDigits(8);
