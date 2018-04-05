@@ -5,6 +5,8 @@ import android.content.Context;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -20,6 +22,7 @@ import timber.log.Timber;
 public class NetworkModule
 {
     @Provides
+    @Singleton
     OkHttpClient provideOkHttpClient(
             Cache cache,
             HttpLoggingInterceptor loggingInterceptor,
@@ -33,23 +36,27 @@ public class NetworkModule
     }
 
     @Provides
+    @Singleton
     Cache provideOkHttpClientCache(File file)
     {
         return new Cache(file, 10 * 1024 * 1024);
     }
 
+    @Singleton
     @Provides
     File provideFileToCache(Context context)
     {
         return new File(context.getCacheDir(), "httpclient_cache");
     }
 
+    @Singleton
     @Provides
     HttpLoggingInterceptor provideHttpLoggingInterceptor(Logger logger)
     {
         return new HttpLoggingInterceptor(logger).setLevel(HttpLoggingInterceptor.Level.BASIC);
     }
 
+    @Singleton
     @Provides
     Logger provideHttpLogger()
     {
@@ -63,6 +70,7 @@ public class NetworkModule
         };
     }
 
+    @Singleton
     @Provides
     Interceptor provideRequestInterceptor(final Context context)
     {
