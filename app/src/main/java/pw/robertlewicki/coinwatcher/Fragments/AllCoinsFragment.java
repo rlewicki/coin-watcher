@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,6 +29,7 @@ import es.dmoral.toasty.Toasty;
 import pw.robertlewicki.coinwatcher.Activities.CoinDetailsActivity;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapCoinsIdsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
@@ -51,6 +54,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
 
     private List<ILongTapObserver> tapObservers;
     private List<IDataChangedObserver> dataChangedObservers;
+
+    private HashMap<String, Integer> coinIds;
 
     public static AllCoinsFragment newInstance(String title, Application app)
     {
@@ -116,6 +121,10 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                 intent.putExtra(BundleKeys.RANK, coin.rank);
                 intent.putExtra(BundleKeys.FULL_NAME, coin.currencyName);
                 intent.putExtra(BundleKeys.PRICE_USD, coin.priceUsd);
+                intent.putExtra(BundleKeys.PRICE_BTC, coin.priceBtc);
+                intent.putExtra(BundleKeys.HOURLY_PERCENT_CHANGE, coin.hourlyPercentChange);
+                intent.putExtra(BundleKeys.DAILY_PERCENT_CHANGE, coin.dailyPercentChange);
+                intent.putExtra(BundleKeys.WEEKLY_PERCENT_CHANGE, coin.weeklyPercentChange);
                 intent.putExtra(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
                 intent.putExtra(BundleKeys.MARKET_CAP, coin.marketCapUsd);
                 intent.putExtra(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
@@ -163,6 +172,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
             }
         });
 
+        coinMarketCap.listAllCoinsIds(this);
+
         return rootView;
     }
 
@@ -176,7 +187,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                 queriedCoins.add(coin);
             }
         }
-        listView.setAdapter(new ListAdapter(app, queriedCoins));
+        listView.setAdapter(new ListAdapter(app, queriedCoins, coinIds));
     }
 
     public void addLongTapObserver(ILongTapObserver observer)
@@ -199,7 +210,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     {
         DisplayPostRequestToast();
         swipeView.setRefreshing(false);
-        listView.setAdapter(new ListAdapter(app, listedCoins));
+        listView.setAdapter(new ListAdapter(app, listedCoins, coinIds));
 
         this.listedCoins = listedCoins;
 
@@ -213,7 +224,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     public void listedLimitedAmountOfCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
         swipeView.setRefreshing(false);
-        listView.setAdapter(new ListAdapter(app, listedCoins));
+        listView.setAdapter(new ListAdapter(app, listedCoins, coinIds));
     }
 
     @Override
@@ -226,6 +237,29 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     public void globalMarketDataCallback(GlobalMarketDataModel marketData)
     {
 
+    }
+
+    @Override
+    public void listedCoinsIdsCallback(CoinMarketCapCoinsIdsModel[] listedCoins)
+    {
+        if(coinIds == null)
+        {
+            coinIds = new HashMap<>();
+        }
+
+        for(CoinMarketCapCoinsIdsModel coinModel : listedCoins)
+        {
+            coinIds.put(coinModel.name, coinModel.id);
+        }
+
+        getActivity().runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                listView.setAdapter(new ListAdapter(app, self.listedCoins, coinIds));
+            }
+        });
     }
 
     @Override

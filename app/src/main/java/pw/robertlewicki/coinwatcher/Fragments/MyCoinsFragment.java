@@ -128,7 +128,7 @@ public class MyCoinsFragment
 
     private void updateView()
     {
-        listView.setAdapter(new ListAdapter(app, coins));
+        listView.setAdapter(new ListAdapter(app, coins, null));
     }
 
     private void addCoinToPreferences(CoinMarketCapDetailsModel coin)

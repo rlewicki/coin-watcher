@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -23,7 +24,19 @@ public class NetworkModule
 {
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(
+    @Named("CacheExcluded")
+    OkHttpClient provideOkHttpClientCacheExcluded(
+            HttpLoggingInterceptor loggingInterceptor)
+    {
+        return new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    @Named("CacheIncluded")
+    OkHttpClient provideOkHttpClientCacheIncluded(
             Cache cache,
             HttpLoggingInterceptor loggingInterceptor,
             Interceptor networkInterceptor)

@@ -1,10 +1,15 @@
 package pw.robertlewicki.coinwatcher.CoinMarketCapApi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -13,11 +18,15 @@ import retrofit2.Retrofit;
 public class CoinMarketCap
 {
     private CoinMarketCapService coinMarketCapService;
+    private CoinMarketCapImageService coinMarketCapImageService;
 
     @Inject
-    public CoinMarketCap(CoinMarketCapService coinMarketCapService)
+    public CoinMarketCap(
+            CoinMarketCapService coinMarketCapService,
+            CoinMarketCapImageService coinMarketCapImageService)
     {
         this.coinMarketCapService = coinMarketCapService;
+        this.coinMarketCapImageService = coinMarketCapImageService;
     }
 
     public void listAllCoins(final CoinMarketCapObserver observer)
@@ -99,6 +108,36 @@ public class CoinMarketCap
             public void onFailure(Call<GlobalMarketDataModel> call, Throwable t)
             {
                 observer.fetchingErrorCallback(t);
+            }
+        });
+    }
+
+    public void listAllCoinsIds(final CoinMarketCapObserver observer)
+    {
+        okhttp3.Call request = coinMarketCapImageService.listAllCoinsIds();
+
+        request.enqueue(new okhttp3.Callback()
+        {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException
+            {
+                try(ResponseBody responseBody = response.body())
+                {
+                    final byte[] responseBytes = responseBody.bytes();
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    final CoinMarketCapCoinsIdsModel[] coinIdsModels
+                            = objectMapper.readValue(
+                                    responseBytes,
+                                    CoinMarketCapCoinsIdsModel[].class);
+
+                    observer.listedCoinsIdsCallback(coinIdsModels);
+                }
             }
         });
     }

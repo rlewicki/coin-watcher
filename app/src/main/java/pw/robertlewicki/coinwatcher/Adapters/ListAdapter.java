@@ -10,8 +10,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindColor;
@@ -20,10 +23,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.R;
+import timber.log.Timber;
 
 public class ListAdapter extends BaseAdapter
 {
 
+    @BindView(R.id.CoinIcon)
+    ImageView coinLogo;
     @BindView(R.id.CoinName)
     TextView coinName;
     @BindView(R.id.CoinPercent)
@@ -44,12 +50,19 @@ public class ListAdapter extends BaseAdapter
     int loseColor;
 
     private List<CoinMarketCapDetailsModel> listedCoins;
+    private HashMap<String, Integer> coinIds;
     private Application app;
 
-    public ListAdapter(Application application, List<CoinMarketCapDetailsModel> listedCoins)
+    private String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/128x128/";
+
+    public ListAdapter(
+            Application application,
+            List<CoinMarketCapDetailsModel> listedCoins,
+            HashMap<String, Integer> coinIds)
     {
         this.app = application;
         this.listedCoins = listedCoins;
+        this.coinIds = coinIds;
     }
 
     @Override
@@ -83,6 +96,35 @@ public class ListAdapter extends BaseAdapter
         ButterKnife.bind(this, newView);
 
         CoinMarketCapDetailsModel coin = listedCoins.get(position);
+
+        if(coinIds != null)
+        {
+            if (coinIds.containsKey(coin.currencyName))
+            {
+                final Integer logoId = coinIds.get(coin.currencyName);
+                final String logoUrl = logosUrl + logoId + ".png";
+                Picasso.get()
+                        .load(logoUrl)
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(coinLogo, new Callback()
+                        {
+                            @Override
+                            public void onSuccess()
+                            {
+                                Timber.i("Using cached image");
+                            }
+
+                            @Override
+                            public void onError(Exception e)
+                            {
+                                Timber.i("Fetching logo from Internet");
+                                Picasso.get()
+                                        .load(logoUrl)
+                                        .into(coinLogo);
+                            }
+                        });
+            }
+        }
 
         coinName.setText(coin.symbol);
         coinValue.setText(String.format("$%s", coin.priceUsd));

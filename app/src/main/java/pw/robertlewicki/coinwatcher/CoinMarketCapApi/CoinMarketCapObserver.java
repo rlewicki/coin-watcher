@@ -8,5 +8,6 @@ public interface CoinMarketCapObserver
     void listedLimitedAmountOfCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins);
     void specificCoinDetailsCallback(CoinMarketCapDetailsModel coinDetails);
     void globalMarketDataCallback(GlobalMarketDataModel marketData);
+    void listedCoinsIdsCallback(CoinMarketCapCoinsIdsModel[] listedCoins);
     void fetchingErrorCallback(Throwable t);
 }

@@ -1,5 +1,7 @@
 package pw.robertlewicki.coinwatcher.Di.Modules;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -10,7 +12,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class RetrofitModule
 {
     @Provides
-    Retrofit provideRetrofitCoinMarketCap(OkHttpClient okHttpClient)
+    Retrofit provideRetrofitCoinMarketCap(
+            @Named("CacheIncluded") OkHttpClient okHttpClient)
     {
         return new Retrofit.Builder()
                 .baseUrl("https://api.coinmarketcap.com/v1/")
