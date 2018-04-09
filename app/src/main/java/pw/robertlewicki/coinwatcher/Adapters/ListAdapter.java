@@ -14,6 +14,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.R;
 import timber.log.Timber;
@@ -50,19 +52,25 @@ public class ListAdapter extends BaseAdapter
     int loseColor;
 
     private List<CoinMarketCapDetailsModel> listedCoins;
-    private HashMap<String, Integer> coinIds;
+    private HashMap<String, Integer> coinsIds;
     private Application app;
 
     private String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/128x128/";
 
-    public ListAdapter(
-            Application application,
-            List<CoinMarketCapDetailsModel> listedCoins,
-            HashMap<String, Integer> coinIds)
+    public ListAdapter(Application application)
     {
         this.app = application;
+        this.listedCoins = new ArrayList<>();
+    }
+
+    public void updateListedCoins(List<CoinMarketCapDetailsModel> listedCoins)
+    {
         this.listedCoins = listedCoins;
-        this.coinIds = coinIds;
+    }
+
+    public void updateCoinsIds(HashMap<String, Integer> coinsIds)
+    {
+        this.coinsIds = coinsIds;
     }
 
     @Override
@@ -95,56 +103,78 @@ public class ListAdapter extends BaseAdapter
 
         ButterKnife.bind(this, newView);
 
-        CoinMarketCapDetailsModel coin = listedCoins.get(position);
-
-        if(coinIds != null)
+        CoinMarketCapDetailsModel coin = null;
+        if(listedCoins != null)
         {
-            if (coinIds.containsKey(coin.currencyName))
-            {
-                final Integer logoId = coinIds.get(coin.currencyName);
-                final String logoUrl = logosUrl + logoId + ".png";
-                Picasso.get()
-                        .load(logoUrl)
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(coinLogo, new Callback()
-                        {
-                            @Override
-                            public void onSuccess()
-                            {
-                                Timber.i("Using cached image");
-                            }
-
-                            @Override
-                            public void onError(Exception e)
-                            {
-                                Timber.i("Fetching logo from Internet");
-                                Picasso.get()
-                                        .load(logoUrl)
-                                        .into(coinLogo);
-                            }
-                        });
-            }
+            coin = listedCoins.get(position);
         }
 
-        coinName.setText(coin.symbol);
-        coinValue.setText(String.format("$%s", coin.priceUsd));
-
-        if(coin.dailyPercentChange != null)
-        {
-            if(coin.dailyPercentChange.contains("-"))
-            {
-                gainArrow.setImageDrawable(redArrow);
-                coinPercent.setText(String.format("%s%%", coin.dailyPercentChange));
-                coinPercent.setTextColor(loseColor);
-            }
-            else
-            {
-                gainArrow.setImageDrawable(greenArrow);
-                coinPercent.setText(String.format("+%s%%", coin.dailyPercentChange));
-                coinPercent.setTextColor(gainColor);
-            }
-        }
-
+        fetchIcon(coin);
+        fillRowData(coin);
         return newView;
+    }
+
+    private void fetchIcon(CoinMarketCapDetailsModel coin)
+    {
+        if(coin == null || coinsIds == null)
+        {
+            return;
+        }
+
+        if (coinsIds.containsKey(coin.currencyName))
+        {
+            final Integer logoId = coinsIds.get(coin.currencyName);
+            final String logoUrl = logosUrl + logoId + ".png";
+            Picasso.get()
+                    .load(logoUrl)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(coinLogo, new Callback()
+                    {
+                        @Override
+                        public void onSuccess()
+                        {
+                            Timber.i("Using cached image");
+                        }
+
+                        @Override
+                        public void onError(Exception e)
+                        {
+                            Timber.i("Fetching logo from Internet");
+                            Picasso.get()
+                                    .load(logoUrl)
+                                    .into(coinLogo);
+                        }
+                    });
+        }
+    }
+
+    private void fillRowData(CoinMarketCapDetailsModel coin)
+    {
+        if(coin != null)
+        {
+            coinName.setText(coin.symbol);
+            coinValue.setText(String.format("$%s", coin.priceUsd));
+            coinPercent.setText(String.format("%s%%", coin.dailyPercentChange));
+            if(coin.dailyPercentChange != null)
+            {
+                if(coin.dailyPercentChange.contains("-"))
+                {
+                    gainArrow.setImageDrawable(redArrow);
+                    coinPercent.setTextColor(loseColor);
+                }
+                else
+                {
+                    gainArrow.setImageDrawable(greenArrow);
+                    coinPercent.setTextColor(gainColor);
+                }
+            }
+        }
+        else
+        {
+            coinName.setText("");
+            coinValue.setText("");
+            coinPercent.setText("");
+            gainArrow.setImageDrawable(null);
+        }
     }
 }

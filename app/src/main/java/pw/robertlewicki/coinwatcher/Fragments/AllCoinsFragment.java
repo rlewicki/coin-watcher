@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -52,10 +51,12 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     private Application app;
     private List<CoinMarketCapDetailsModel> listedCoins;
 
+    private ListAdapter listAdapter;
+
     private List<ILongTapObserver> tapObservers;
     private List<IDataChangedObserver> dataChangedObservers;
 
-    private HashMap<String, Integer> coinIds;
+    private HashMap<String, Integer> coinsIds;
 
     public static AllCoinsFragment newInstance(String title, Application app)
     {
@@ -66,6 +67,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         fragment.listedCoins = new ArrayList<>();
         fragment.tapObservers = new ArrayList<>();
         fragment.dataChangedObservers = new ArrayList<>();
+        fragment.listAdapter = new ListAdapter(app);
 
         return fragment;
     }
@@ -187,7 +189,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                 queriedCoins.add(coin);
             }
         }
-        listView.setAdapter(new ListAdapter(app, queriedCoins, coinIds));
+        listAdapter.updateListedCoins(queriedCoins);
+        listView.setAdapter(listAdapter);
     }
 
     public void addLongTapObserver(ILongTapObserver observer)
@@ -210,7 +213,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     {
         DisplayPostRequestToast();
         swipeView.setRefreshing(false);
-        listView.setAdapter(new ListAdapter(app, listedCoins, coinIds));
+        listAdapter.updateListedCoins(listedCoins);
+        listView.setAdapter(listAdapter);
 
         this.listedCoins = listedCoins;
 
@@ -224,7 +228,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     public void listedLimitedAmountOfCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
         swipeView.setRefreshing(false);
-        listView.setAdapter(new ListAdapter(app, listedCoins, coinIds));
+        listAdapter.updateListedCoins(listedCoins);
+        listView.setAdapter(listAdapter);
     }
 
     @Override
@@ -242,14 +247,14 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     @Override
     public void listedCoinsIdsCallback(CoinMarketCapCoinsIdsModel[] listedCoins)
     {
-        if(coinIds == null)
+        if(coinsIds == null)
         {
-            coinIds = new HashMap<>();
+            coinsIds = new HashMap<>();
         }
 
         for(CoinMarketCapCoinsIdsModel coinModel : listedCoins)
         {
-            coinIds.put(coinModel.name, coinModel.id);
+            coinsIds.put(coinModel.name, coinModel.id);
         }
 
         getActivity().runOnUiThread(new Runnable()
@@ -257,7 +262,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
             @Override
             public void run()
             {
-                listView.setAdapter(new ListAdapter(app, self.listedCoins, coinIds));
+                listAdapter.updateCoinsIds(coinsIds);
+                listView.setAdapter(listAdapter);
             }
         });
     }

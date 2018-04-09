@@ -35,6 +35,7 @@ public class MyCoinsFragment
     private String title;
     private Application app;
     private List<CoinMarketCapDetailsModel> coins;
+    private ListAdapter listAdapter;
 
     public static MyCoinsFragment newInstance(String title, Application app)
     {
@@ -43,6 +44,7 @@ public class MyCoinsFragment
         fragment.title = title;
         fragment.app = app;
         fragment.coins = new ArrayList<>();
+        fragment.listAdapter = new ListAdapter(app);
 
         return fragment;
     }
@@ -128,7 +130,8 @@ public class MyCoinsFragment
 
     private void updateView()
     {
-        listView.setAdapter(new ListAdapter(app, coins, null));
+        listAdapter.updateListedCoins(coins);
+        listView.setAdapter(listAdapter);
     }
 
     private void addCoinToPreferences(CoinMarketCapDetailsModel coin)
