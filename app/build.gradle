@@ -61,6 +61,8 @@ dependencies {
 
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
     implementation 'com.github.AndroidDeveloperLB:AutoFitTextView:4'
 
     testImplementation 'junit:junit:4.12'
