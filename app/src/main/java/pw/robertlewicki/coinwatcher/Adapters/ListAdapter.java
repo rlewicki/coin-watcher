@@ -152,7 +152,7 @@ public class ListAdapter extends BaseAdapter
     {
         if(coin != null)
         {
-            coinName.setText(coin.symbol);
+            coinName.setText(coin.currencyName);
             coinValue.setText(String.format("$%s", coin.priceUsd));
             coinPercent.setText(String.format("%s%%", coin.dailyPercentChange));
             if(coin.dailyPercentChange != null)

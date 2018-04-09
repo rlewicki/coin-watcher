@@ -11,7 +11,7 @@
         android:padding="16dp"
         android:layout_alignParentStart="true"/>
 
-    <TextView
+    <com.lb.auto_fit_textview.AutoResizeTextView
         android:id="@+id/CoinName"
         android:layout_width="176dp"
         android:layout_height="42dp"
