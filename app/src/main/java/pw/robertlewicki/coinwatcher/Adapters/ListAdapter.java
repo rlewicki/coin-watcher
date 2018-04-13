@@ -138,7 +138,6 @@ public class ListAdapter extends BaseAdapter
                         {
                             Picasso.get()
                                     .load(logoUrl)
-                                    .placeholder(logoPlaceholder)
                                     .noFade()
                                     .into(coinLogo);
                         }
