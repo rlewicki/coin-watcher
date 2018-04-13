@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +30,6 @@ import timber.log.Timber;
 
 public class ListAdapter extends BaseAdapter
 {
-
     @BindView(R.id.CoinIcon)
     ImageView coinLogo;
     @BindView(R.id.CoinName)
@@ -45,6 +45,8 @@ public class ListAdapter extends BaseAdapter
     Drawable greenArrow;
     @BindDrawable(R.drawable.ic_arrow_lose_red_24dp)
     Drawable redArrow;
+    @BindDrawable(R.drawable.ic_image_black_24dp)
+    Drawable logoPlaceholder;
 
     @BindColor(R.color.gain)
     int gainColor;
@@ -55,7 +57,7 @@ public class ListAdapter extends BaseAdapter
     private HashMap<String, Integer> coinsIds;
     private Application app;
 
-    private String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/128x128/";
+    private String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/";
 
     public ListAdapter(Application application)
     {
@@ -125,24 +127,25 @@ public class ListAdapter extends BaseAdapter
         {
             final Integer logoId = coinsIds.get(coin.currencyName);
             final String logoUrl = logosUrl + logoId + ".png";
+
             Picasso.get()
                     .load(logoUrl)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(coinLogo, new Callback()
+                    .placeholder(logoPlaceholder)
+                    .fetch(new Callback()
                     {
                         @Override
                         public void onSuccess()
                         {
-                            Timber.i("Using cached image");
+                            Picasso.get()
+                                    .load(logoUrl)
+                                    .placeholder(logoPlaceholder)
+                                    .noFade()
+                                    .into(coinLogo);
                         }
 
                         @Override
                         public void onError(Exception e)
                         {
-                            Timber.i("Fetching logo from Internet");
-                            Picasso.get()
-                                    .load(logoUrl)
-                                    .into(coinLogo);
                         }
                     });
         }

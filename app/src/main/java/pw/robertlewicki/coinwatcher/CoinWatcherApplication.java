@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.support.v4.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
@@ -34,6 +36,8 @@ public class CoinWatcherApplication extends Application
                 .contextModule(new ContextModule(this))
                 .build()
                 .inject(this);
+
+        Picasso.get().setIndicatorsEnabled(true);
     }
 
     @Override
