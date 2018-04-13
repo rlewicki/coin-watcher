@@ -31,7 +31,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
 
         <!-- Rank field -->
         <LinearLayout style="@style/HorizontalLayoutStyle">
@@ -66,6 +67,54 @@
             <com.lb.auto_fit_textview.AutoResizeTextView
                 style="@style/TextStyle"
                 android:id="@+id/priceUsdField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- BTC price field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/priceBtcLabel"
+                android:text="@string/price_btc"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/priceBtcField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Hourly percent change field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/hourlyPercentChangeLabel"
+                android:text="@string/hourlyPercentChange"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/hourlyPercentChangeField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Daily percent change field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/dailyPercentChangeLabel"
+                android:text="@string/dailyPercentChange"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/dailyPercentChangeField"
+                android:text="@string/lorem_ipsum"/>
+        </LinearLayout>
+
+        <!-- Weekly percent change field -->
+        <LinearLayout style="@style/HorizontalLayoutStyle">
+            <TextView style="@style/LabelTextStyle"
+                android:id="@+id/weeklyPercentChangeLabel"
+                android:text="@string/weeklyPercentChange"/>
+
+            <com.lb.auto_fit_textview.AutoResizeTextView
+                style="@style/TextStyle"
+                android:id="@+id/weeklyPercentChangeField"
                 android:text="@string/lorem_ipsum"/>
         </LinearLayout>
 

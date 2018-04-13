@@ -25,6 +25,14 @@ public class CoinDetailsActivity extends AppCompatActivity
     AutoResizeTextView fullNameField;
     @BindView(R.id.priceUsdField)
     AutoResizeTextView priceUsdField;
+    @BindView(R.id.priceBtcField)
+    AutoResizeTextView priceBtcField;
+    @BindView(R.id.hourlyPercentChangeField)
+    AutoResizeTextView hourlyPercentChangeField;
+    @BindView(R.id.dailyPercentChangeField)
+    AutoResizeTextView dailyPercentChangeField;
+    @BindView(R.id.weeklyPercentChangeField)
+    AutoResizeTextView weeklyPercentChangeField;
     @BindView(R.id.dailyVolumeUsdField)
     AutoResizeTextView dailyVolumeUsdField;
     @BindView(R.id.marketCapUsdField)
@@ -58,6 +66,10 @@ public class CoinDetailsActivity extends AppCompatActivity
         String rank = getIntent().getStringExtra(BundleKeys.RANK);
         String fullName = getIntent().getStringExtra(BundleKeys.FULL_NAME);
         String priceUsd = getIntent().getStringExtra(BundleKeys.PRICE_USD);
+        String priceBtc = getIntent().getStringExtra(BundleKeys.PRICE_BTC);
+        String hourlyChange = getIntent().getStringExtra(BundleKeys.HOURLY_PERCENT_CHANGE);
+        String dailyChange = getIntent().getStringExtra(BundleKeys.DAILY_PERCENT_CHANGE);
+        String weeklyChange = getIntent().getStringExtra(BundleKeys.WEEKLY_PERCENT_CHANGE);
         String dailyVolume = getIntent().getStringExtra(BundleKeys.DAILY_VOLUME);
         String marketCap = getIntent().getStringExtra(BundleKeys.MARKET_CAP);
         String availableSupply = getIntent().getStringExtra(BundleKeys.AVAILABLE_SUPPLY);
@@ -73,6 +85,11 @@ public class CoinDetailsActivity extends AppCompatActivity
 
         currencyFormat.setMaximumFractionDigits(8);
         priceUsdField.setText(currencyFormat.format(Float.parseFloat(priceUsd)));
+        priceBtcField.setText(priceBtc);
+
+        hourlyPercentChangeField.setText(String.format("%s%%", hourlyChange));
+        dailyPercentChangeField.setText(String.format("%s%%", dailyChange));
+        weeklyPercentChangeField.setText(String.format("%s%%", weeklyChange));
 
         currencyFormat.setMaximumFractionDigits(2);
         dailyVolumeUsdField.setText(currencyFormat.format(Float.parseFloat(dailyVolume)));

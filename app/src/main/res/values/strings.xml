@@ -12,4 +12,8 @@
     <string name="available_supply">Available supply:</string>
     <string name="total_supply">Total supply:</string>
     <string name="last_updated">Last updated:</string>
+    <string name="price_btc">Price BTC:</string>
+    <string name="hourlyPercentChange">Hourly change:</string>
+    <string name="dailyPercentChange">Daily change:</string>
+    <string name="weeklyPercentChange">Weekly change:</string>
 </resources>

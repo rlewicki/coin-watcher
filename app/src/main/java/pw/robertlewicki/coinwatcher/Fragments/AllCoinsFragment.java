@@ -32,8 +32,7 @@ import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapCoinsIdsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
-import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
-import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
+import pw.robertlewicki.coinwatcher.Interfaces.WatchList;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.R;
 import pw.robertlewicki.coinwatcher.Utils.Utils;
@@ -53,21 +52,19 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
 
     private ListAdapter listAdapter;
 
-    private List<ILongTapObserver> tapObservers;
-    private List<IDataChangedObserver> dataChangedObservers;
+    private WatchList watchList;
 
     private HashMap<String, Integer> coinsIds;
 
-    public static AllCoinsFragment newInstance(String title, Application app)
+    public static AllCoinsFragment newInstance(String title, Application app, WatchList watchList)
     {
         AllCoinsFragment fragment = new AllCoinsFragment();
 
         fragment.title = title;
         fragment.app = app;
         fragment.listedCoins = new ArrayList<>();
-        fragment.tapObservers = new ArrayList<>();
-        fragment.dataChangedObservers = new ArrayList<>();
         fragment.listAdapter = new ListAdapter(app);
+        fragment.watchList = watchList;
 
         return fragment;
     }
@@ -153,10 +150,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                for(ILongTapObserver observer : tapObservers)
-                                {
-                                    observer.update(selectedCoin);
-                                }
+                                watchList.newCoinAdded(selectedCoin);
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
@@ -193,16 +187,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         listView.setAdapter(listAdapter);
     }
 
-    public void addLongTapObserver(ILongTapObserver observer)
-    {
-        tapObservers.add(observer);
-    }
-
-    public void addDataChangedObserver(IDataChangedObserver observer)
-    {
-        dataChangedObservers.add(observer);
-    }
-
     public String getTitle()
     {
         return title;
@@ -217,11 +201,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         listView.setAdapter(listAdapter);
 
         this.listedCoins = listedCoins;
-
-        for(IDataChangedObserver observer : dataChangedObservers)
-        {
-            observer.update(listedCoins);
-        }
+        watchList.coinsDataUpdated(listedCoins);
     }
 
     @Override
@@ -256,6 +236,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         {
             coinsIds.put(coinModel.name, coinModel.id);
         }
+
+        watchList.coinsIdsFetched(coinsIds);
 
         getActivity().runOnUiThread(new Runnable()
         {

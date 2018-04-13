@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,20 +22,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
-import pw.robertlewicki.coinwatcher.Interfaces.IDataChangedObserver;
-import pw.robertlewicki.coinwatcher.Interfaces.ILongTapObserver;
-import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
+import pw.robertlewicki.coinwatcher.Interfaces.WatchList;
 import pw.robertlewicki.coinwatcher.R;
 
-public class MyCoinsFragment
-        extends Fragment
-        implements ILongTapObserver, IDataChangedObserver
+public class MyCoinsFragment extends Fragment implements WatchList
 {
     @BindView(R.id.CoinListView) ListView listView;
 
     private String title;
-    private Application app;
     private List<CoinMarketCapDetailsModel> coins;
+    private HashMap<String, Integer> coinsIds;
     private ListAdapter listAdapter;
 
     public static MyCoinsFragment newInstance(String title, Application app)
@@ -42,8 +39,8 @@ public class MyCoinsFragment
         MyCoinsFragment fragment = new MyCoinsFragment();
 
         fragment.title = title;
-        fragment.app = app;
         fragment.coins = new ArrayList<>();
+        fragment.coinsIds = new HashMap<>();
         fragment.listAdapter = new ListAdapter(app);
 
         return fragment;
@@ -108,30 +105,18 @@ public class MyCoinsFragment
         return title;
     }
 
-    @Override
-    public void update(CoinMarketCapDetailsModel coin)
-    {
-        if(coins.contains(coin))
-        {
-            return;
-        }
-
-        coins.add(coin);
-        addCoinToPreferences(coin);
-        updateView();
-    }
-
-    @Override
-    public void update(List<CoinMarketCapDetailsModel> coins)
-    {
-        this.coins = getCoinsFromPreferences(coins);
-        updateView();
-    }
-
     private void updateView()
     {
-        listAdapter.updateListedCoins(coins);
-        listView.setAdapter(listAdapter);
+        getActivity().runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                listAdapter.updateListedCoins(coins);
+                listAdapter.updateCoinsIds(coinsIds);
+                listView.setAdapter(listAdapter);
+            }
+        });
     }
 
     private void addCoinToPreferences(CoinMarketCapDetailsModel coin)
@@ -175,5 +160,32 @@ public class MyCoinsFragment
             }
         }
         return selectedCoins;
+    }
+
+    @Override
+    public void newCoinAdded(CoinMarketCapDetailsModel coin)
+    {
+        if(coins.contains(coin))
+        {
+            return;
+        }
+
+        coins.add(coin);
+        addCoinToPreferences(coin);
+        updateView();
+    }
+
+    @Override
+    public void coinsDataUpdated(List<CoinMarketCapDetailsModel> coins)
+    {
+        this.coins = getCoinsFromPreferences(coins);
+        updateView();
+    }
+
+    @Override
+    public void coinsIdsFetched(HashMap<String, Integer> coinsIds)
+    {
+        this.coinsIds = coinsIds;
+        updateView();
     }
 }
