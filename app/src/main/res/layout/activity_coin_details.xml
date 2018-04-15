@@ -40,7 +40,7 @@
                 android:id="@+id/rankLabel"
                 android:text="@string/rank"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/rankField"
                 android:text="@string/lorem_ipsum" />
@@ -52,7 +52,7 @@
                 android:id="@+id/fullNameLabel"
                 android:text="@string/full_name"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/fullNameField"
                 android:text="@string/lorem_ipsum"/>
@@ -64,7 +64,7 @@
                 android:id="@+id/priceUsdLabel"
                 android:text="@string/price_usd"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/priceUsdField"
                 android:text="@string/lorem_ipsum"/>
@@ -76,7 +76,7 @@
                 android:id="@+id/priceBtcLabel"
                 android:text="@string/price_btc"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/priceBtcField"
                 android:text="@string/lorem_ipsum"/>
@@ -88,7 +88,7 @@
                 android:id="@+id/hourlyPercentChangeLabel"
                 android:text="@string/hourlyPercentChange"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/hourlyPercentChangeField"
                 android:text="@string/lorem_ipsum"/>
@@ -100,7 +100,7 @@
                 android:id="@+id/dailyPercentChangeLabel"
                 android:text="@string/dailyPercentChange"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/dailyPercentChangeField"
                 android:text="@string/lorem_ipsum"/>
@@ -112,7 +112,7 @@
                 android:id="@+id/weeklyPercentChangeLabel"
                 android:text="@string/weeklyPercentChange"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/weeklyPercentChangeField"
                 android:text="@string/lorem_ipsum"/>
@@ -124,7 +124,7 @@
                 android:id="@+id/dailyVolumeUsdLabel"
                 android:text="@string/volume_24h"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/dailyVolumeUsdField"
                 android:text="@string/lorem_ipsum"/>
@@ -136,7 +136,7 @@
                 android:id="@+id/marketCapUsdLabel"
                 android:text="@string/market_cap"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/marketCapUsdField"
                 android:text="@string/lorem_ipsum"/>
@@ -148,7 +148,7 @@
                 android:id="@+id/availableSupplyLabel"
                 android:text="@string/available_supply"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/availableSupplyField"
                 android:text="@string/lorem_ipsum"/>
@@ -160,7 +160,7 @@
                 android:id="@+id/totalSupplyLabel"
                 android:text="@string/total_supply"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/totalSupplyField"
                 android:text="@string/lorem_ipsum"/>
@@ -172,7 +172,7 @@
                 android:id="@+id/lastUpdateTimeLabel"
                 android:text="@string/last_updated"/>
 
-            <com.lb.auto_fit_textview.AutoResizeTextView
+            <me.grantland.widget.AutofitTextView
                 style="@style/TextStyle"
                 android:id="@+id/lastUpdateTimeField"
                 android:text="@string/lorem_ipsum"/>

@@ -3,10 +3,6 @@ package pw.robertlewicki.coinwatcher.Activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-
-import com.lb.auto_fit_textview.AutoResizeTextView;
-import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.Date;
@@ -14,35 +10,36 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.grantland.widget.AutofitTextView;
 import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.R;
 
 public class CoinDetailsActivity extends AppCompatActivity
 {
     @BindView(R.id.rankField)
-    AutoResizeTextView rankField;
+    AutofitTextView rankField;
     @BindView(R.id.fullNameField)
-    AutoResizeTextView fullNameField;
+    AutofitTextView fullNameField;
     @BindView(R.id.priceUsdField)
-    AutoResizeTextView priceUsdField;
+    AutofitTextView priceUsdField;
     @BindView(R.id.priceBtcField)
-    AutoResizeTextView priceBtcField;
+    AutofitTextView priceBtcField;
     @BindView(R.id.hourlyPercentChangeField)
-    AutoResizeTextView hourlyPercentChangeField;
+    AutofitTextView hourlyPercentChangeField;
     @BindView(R.id.dailyPercentChangeField)
-    AutoResizeTextView dailyPercentChangeField;
+    AutofitTextView dailyPercentChangeField;
     @BindView(R.id.weeklyPercentChangeField)
-    AutoResizeTextView weeklyPercentChangeField;
+    AutofitTextView weeklyPercentChangeField;
     @BindView(R.id.dailyVolumeUsdField)
-    AutoResizeTextView dailyVolumeUsdField;
+    AutofitTextView dailyVolumeUsdField;
     @BindView(R.id.marketCapUsdField)
-    AutoResizeTextView marketCapUsdField;
+    AutofitTextView marketCapUsdField;
     @BindView(R.id.availableSupplyField)
-    AutoResizeTextView availableSupplyField;
+    AutofitTextView availableSupplyField;
     @BindView(R.id.totalSupplyField)
-    AutoResizeTextView totalSupplyField;
+    AutofitTextView totalSupplyField;
     @BindView(R.id.lastUpdateTimeField)
-    AutoResizeTextView lastUpdateTimeField;
+    AutofitTextView lastUpdateTimeField;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
