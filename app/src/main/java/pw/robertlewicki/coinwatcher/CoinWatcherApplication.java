@@ -36,8 +36,6 @@ public class CoinWatcherApplication extends Application
                 .contextModule(new ContextModule(this))
                 .build()
                 .inject(this);
-
-        Picasso.get().setIndicatorsEnabled(true);
     }
 
     @Override
