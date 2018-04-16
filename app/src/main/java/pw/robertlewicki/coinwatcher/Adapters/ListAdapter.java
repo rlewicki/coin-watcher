@@ -1,90 +1,126 @@
 package pw.robertlewicki.coinwatcher.Adapters;
 
-import android.app.Application;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
+import pw.robertlewicki.coinwatcher.Activities.CoinDetailsActivity;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
+import pw.robertlewicki.coinwatcher.Interfaces.DialogOwner;
+import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.R;
-import timber.log.Timber;
 
-public class ListAdapter extends BaseAdapter
+public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>
 {
-    @BindView(R.id.CoinIcon)
-    ImageView coinLogo;
-    @BindView(R.id.CoinName)
-    TextView coinName;
-    @BindView(R.id.CoinPercent)
-    TextView coinPercent;
-    @BindView(R.id.CoinValue)
-    TextView coinValue;
-    @BindView(R.id.GainArrow)
-    ImageView gainArrow;
+    class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnLongClickListener
+    {
+        @BindView(R.id.CoinIcon)
+        ImageView coinLogo;
+        @BindView(R.id.CoinName)
+        TextView coinName;
+        @BindView(R.id.CoinPercent)
+        TextView coinPercent;
+        @BindView(R.id.CoinValue)
+        TextView coinValue;
+        @BindView(R.id.GainArrow)
+        ImageView gainArrow;
 
-    @BindDrawable(R.drawable.ic_arrow_gain_green_24dp)
-    Drawable greenArrow;
-    @BindDrawable(R.drawable.ic_arrow_lose_red_24dp)
-    Drawable redArrow;
-    @BindDrawable(R.drawable.ic_image_black_24dp)
-    Drawable logoPlaceholder;
+        @BindDrawable(R.drawable.ic_arrow_gain_green_24dp)
+        Drawable greenArrow;
+        @BindDrawable(R.drawable.ic_arrow_lose_red_24dp)
+        Drawable redArrow;
 
-    @BindColor(R.color.gain)
-    int gainColor;
-    @BindColor(R.color.lose)
-    int loseColor;
+        @BindColor(R.color.gain)
+        int gainColor;
+        @BindColor(R.color.lose)
+        int loseColor;
+
+        ViewHolder(View itemView)
+        {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            displayDetailsActivity(v, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v)
+        {
+            dialogOwner.displayDialog(v, getAdapterPosition());
+            return false;
+        }
+    }
 
     private List<CoinMarketCapDetailsModel> listedCoins;
-    private HashMap<String, Integer> coinsIds;
-    private Application app;
+    private DialogOwner dialogOwner;
 
-    private String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/";
-
-    public ListAdapter(Application application)
-    {
-        this.app = application;
-        this.listedCoins = new ArrayList<>();
-    }
-
-    public void updateListedCoins(List<CoinMarketCapDetailsModel> listedCoins)
+    public ListAdapter(List<CoinMarketCapDetailsModel> listedCoins, DialogOwner dialogOwner)
     {
         this.listedCoins = listedCoins;
+        this.dialogOwner = dialogOwner;
     }
 
-    public void updateCoinsIds(HashMap<String, Integer> coinsIds)
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        this.coinsIds = coinsIds;
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View rowView = inflater.inflate(R.layout.adapter_list_row, parent, false);
+        return new ViewHolder(rowView);
     }
 
     @Override
-    public int getCount()
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        return listedCoins.size();
-    }
+        CoinMarketCapDetailsModel coin = listedCoins.get(position);
 
-    @Override
-    public Object getItem(int position)
-    {
-        return listedCoins.get(position);
+        String logosUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/";
+        String url = String.format("%s%d.png", logosUrl, coin.logoIds);
+        String price = String.format("$%s", coin.priceUsd);
+        String change = String.format("%s%%", coin.dailyPercentChange);
+
+        Picasso.get()
+                .load(url)
+                .into(holder.coinLogo);
+        holder.coinName.setText(coin.currencyName);
+        holder.coinValue.setText(price);
+        holder.coinPercent.setText(change);
+        if(change.contains("-"))
+        {
+            holder.gainArrow.setImageDrawable(holder.redArrow);
+            holder.coinPercent.setTextColor(holder.loseColor);
+        }
+        else
+        {
+            holder.gainArrow.setImageDrawable(holder.greenArrow);
+            holder.coinPercent.setTextColor(holder.gainColor);
+        }
     }
 
     @Override
@@ -94,89 +130,30 @@ public class ListAdapter extends BaseAdapter
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public int getItemCount()
     {
-        LayoutInflater inflater = LayoutInflater.from(app.getApplicationContext());
-        View newView = convertView;
-        if(newView == null)
-        {
-            newView = inflater.inflate(R.layout.adapter_list_row, parent, false);
-        }
-
-        ButterKnife.bind(this, newView);
-
-        CoinMarketCapDetailsModel coin = null;
-        if(listedCoins != null)
-        {
-            coin = listedCoins.get(position);
-        }
-
-        fetchIcon(coin);
-        fillRowData(coin);
-        return newView;
+        return listedCoins.size();
     }
 
-    private void fetchIcon(CoinMarketCapDetailsModel coin)
+    private void displayDetailsActivity(View v, int position)
     {
-        if(coin == null || coinsIds == null)
-        {
-            return;
-        }
+        final CoinMarketCapDetailsModel coin = listedCoins.get(position);
 
-        if (coinsIds.containsKey(coin.currencyName))
-        {
-            final Integer logoId = coinsIds.get(coin.currencyName);
-            final String logoUrl = logosUrl + logoId + ".png";
+        Intent intent = new Intent(v.getContext(), CoinDetailsActivity.class);
 
-            Picasso.get()
-                    .load(logoUrl)
-                    .placeholder(logoPlaceholder)
-                    .fetch(new Callback()
-                    {
-                        @Override
-                        public void onSuccess()
-                        {
-                            Picasso.get()
-                                    .load(logoUrl)
-                                    .noFade()
-                                    .into(coinLogo);
-                        }
+        intent.putExtra(BundleKeys.RANK, coin.rank);
+        intent.putExtra(BundleKeys.FULL_NAME, coin.currencyName);
+        intent.putExtra(BundleKeys.PRICE_USD, coin.priceUsd);
+        intent.putExtra(BundleKeys.PRICE_BTC, coin.priceBtc);
+        intent.putExtra(BundleKeys.HOURLY_PERCENT_CHANGE, coin.hourlyPercentChange);
+        intent.putExtra(BundleKeys.DAILY_PERCENT_CHANGE, coin.dailyPercentChange);
+        intent.putExtra(BundleKeys.WEEKLY_PERCENT_CHANGE, coin.weeklyPercentChange);
+        intent.putExtra(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
+        intent.putExtra(BundleKeys.MARKET_CAP, coin.marketCapUsd);
+        intent.putExtra(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
+        intent.putExtra(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
+        intent.putExtra(BundleKeys.LAST_UPDATE_TIME, coin.lastUpdated);
 
-                        @Override
-                        public void onError(Exception e)
-                        {
-                        }
-                    });
-        }
-    }
-
-    private void fillRowData(CoinMarketCapDetailsModel coin)
-    {
-        if(coin != null)
-        {
-            coinName.setText(coin.currencyName);
-            coinValue.setText(String.format("$%s", coin.priceUsd));
-            coinPercent.setText(String.format("%s%%", coin.dailyPercentChange));
-            if(coin.dailyPercentChange != null)
-            {
-                if(coin.dailyPercentChange.contains("-"))
-                {
-                    gainArrow.setImageDrawable(redArrow);
-                    coinPercent.setTextColor(loseColor);
-                }
-                else
-                {
-                    gainArrow.setImageDrawable(greenArrow);
-                    coinPercent.setTextColor(gainColor);
-                }
-            }
-        }
-        else
-        {
-            coinName.setText("");
-            coinValue.setText("");
-            coinPercent.setText("");
-            gainArrow.setImageDrawable(null);
-        }
+        v.getContext().startActivity(intent);
     }
 }

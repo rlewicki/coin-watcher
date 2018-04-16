@@ -4,19 +4,18 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,23 +24,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import es.dmoral.toasty.Toasty;
-import pw.robertlewicki.coinwatcher.Activities.CoinDetailsActivity;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapCoinsIdsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapDetailsModel;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapObserver;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.GlobalMarketDataModel;
+import pw.robertlewicki.coinwatcher.Interfaces.DialogOwner;
 import pw.robertlewicki.coinwatcher.Interfaces.WatchList;
-import pw.robertlewicki.coinwatcher.Misc.BundleKeys;
 import pw.robertlewicki.coinwatcher.R;
 import pw.robertlewicki.coinwatcher.Utils.Utils;
 
-public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
+public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver, DialogOwner
 {
     private final AllCoinsFragment self = this;
     @BindView(R.id.SwipeView) SwipeRefreshLayout swipeView;
-    @BindView(R.id.CoinListView) ListView listView;
 
     @Inject
     CoinMarketCap coinMarketCap;
@@ -49,12 +46,18 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     private String title;
     private Application app;
     private List<CoinMarketCapDetailsModel> listedCoins;
+    private CoinMarketCapCoinsIdsModel[] listedIds;
+
 
     private ListAdapter listAdapter;
 
     private WatchList watchList;
 
-    private HashMap<String, Integer> coinsIds;
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+
+    private int dataSources = 2;
+    private int callbacksReceived = 0;
 
     public static AllCoinsFragment newInstance(String title, Application app, WatchList watchList)
     {
@@ -63,7 +66,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         fragment.title = title;
         fragment.app = app;
         fragment.listedCoins = new ArrayList<>();
-        fragment.listAdapter = new ListAdapter(app);
         fragment.watchList = watchList;
 
         return fragment;
@@ -82,12 +84,21 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
         View rootView = inflater.inflate(R.layout.all_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
+        recyclerView = (RecyclerView)rootView.findViewById(R.id.CoinListView);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
             public void onRefresh()
             {
                 coinMarketCap.listAllCoins(self);
+                coinMarketCap.listAllCoinsIds(self);
             }
         });
 
@@ -104,71 +115,9 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
             {
                 swipeView.setRefreshing(true);
                 coinMarketCap.listAllCoins(self);
+                coinMarketCap.listAllCoinsIds(self);
             }
         });
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                Bundle data = new Bundle();
-                CoinMarketCapDetailsModel coin = listedCoins.get(position);
-
-                Intent intent = new Intent(getContext(), CoinDetailsActivity.class);
-
-                intent.putExtra(BundleKeys.RANK, coin.rank);
-                intent.putExtra(BundleKeys.FULL_NAME, coin.currencyName);
-                intent.putExtra(BundleKeys.PRICE_USD, coin.priceUsd);
-                intent.putExtra(BundleKeys.PRICE_BTC, coin.priceBtc);
-                intent.putExtra(BundleKeys.HOURLY_PERCENT_CHANGE, coin.hourlyPercentChange);
-                intent.putExtra(BundleKeys.DAILY_PERCENT_CHANGE, coin.dailyPercentChange);
-                intent.putExtra(BundleKeys.WEEKLY_PERCENT_CHANGE, coin.weeklyPercentChange);
-                intent.putExtra(BundleKeys.DAILY_VOLUME, coin.dailyVolumeUsd);
-                intent.putExtra(BundleKeys.MARKET_CAP, coin.marketCapUsd);
-                intent.putExtra(BundleKeys.AVAILABLE_SUPPLY, coin.availableSupply);
-                intent.putExtra(BundleKeys.TOTAL_SUPPLY, coin.totalSupply);
-                intent.putExtra(BundleKeys.LAST_UPDATE_TIME, coin.lastUpdated);
-
-                startActivity(intent);
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-        {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                final CoinMarketCapDetailsModel selectedCoin = listedCoins.get(position);
-
-                builder
-                        .setMessage(String.format("Do you want to add %s to your list?", selectedCoin.currencyName))
-                        .setPositiveButton("Proceed", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                watchList.newCoinAdded(selectedCoin);
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                dialog.dismiss();
-                            }
-                        })
-                        .create()
-                        .show();
-
-                return true;
-            }
-        });
-
-        coinMarketCap.listAllCoinsIds(this);
 
         return rootView;
     }
@@ -183,8 +132,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
                 queriedCoins.add(coin);
             }
         }
-        listAdapter.updateListedCoins(queriedCoins);
-        listView.setAdapter(listAdapter);
+        updateAdapter();
     }
 
     public String getTitle()
@@ -193,70 +141,95 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver
     }
 
     @Override
+    public void displayDialog(View view, int position)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final CoinMarketCapDetailsModel selectedCoin = listedCoins.get(position);
+
+        builder
+                .setMessage(String.format("Do you want to add %s to watch list?", selectedCoin.currencyName))
+                .setPositiveButton("Proceed", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        watchList.newCoinAdded(selectedCoin);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    private void updateAdapter()
+    {
+        callbacksReceived++;
+        if(callbacksReceived == dataSources)
+        {
+            callbacksReceived = 0;
+
+            for(int i = 0; i < listedCoins.size(); i++)
+            {
+                listedCoins.get(i).logoIds = listedIds[i].id;
+            }
+
+            watchList.dataUpdated(listedCoins);
+
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    recyclerView.setAdapter(new ListAdapter(listedCoins, self));
+                }
+            });
+        }
+    }
+
+    @Override
     public void listedCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
-        DisplayPostRequestToast();
+        displayPostRequestToast();
         swipeView.setRefreshing(false);
-        listAdapter.updateListedCoins(listedCoins);
-        listView.setAdapter(listAdapter);
-
         this.listedCoins = listedCoins;
-        watchList.coinsDataUpdated(listedCoins);
+        updateAdapter();
     }
 
     @Override
     public void listedLimitedAmountOfCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
-        swipeView.setRefreshing(false);
-        listAdapter.updateListedCoins(listedCoins);
-        listView.setAdapter(listAdapter);
     }
 
     @Override
     public void specificCoinDetailsCallback(CoinMarketCapDetailsModel coinDetails)
     {
-
     }
 
     @Override
     public void globalMarketDataCallback(GlobalMarketDataModel marketData)
     {
-
     }
 
     @Override
     public void listedCoinsIdsCallback(CoinMarketCapCoinsIdsModel[] listedCoins)
     {
-        if(coinsIds == null)
-        {
-            coinsIds = new HashMap<>();
-        }
-
-        for(CoinMarketCapCoinsIdsModel coinModel : listedCoins)
-        {
-            coinsIds.put(coinModel.name, coinModel.id);
-        }
-
-        watchList.coinsIdsFetched(coinsIds);
-
-        getActivity().runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                listAdapter.updateCoinsIds(coinsIds);
-                listView.setAdapter(listAdapter);
-            }
-        });
+        listedIds = listedCoins;
+        updateAdapter();
     }
 
     @Override
     public void fetchingErrorCallback(Throwable t)
     {
-
     }
 
-    private void DisplayPostRequestToast()
+    private void displayPostRequestToast()
     {
         if(Utils.isNetworkAvailable(getContext()))
         {

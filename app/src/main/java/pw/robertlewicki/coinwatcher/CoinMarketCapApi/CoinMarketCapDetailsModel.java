@@ -34,4 +34,6 @@ public class CoinMarketCapDetailsModel
     public String weeklyPercentChange;
     @JsonProperty("last_updated")
     public String lastUpdated;
+
+    public int logoIds;
 }
