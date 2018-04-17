@@ -87,7 +87,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
         recyclerView = (RecyclerView)rootView.findViewById(R.id.CoinListView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
@@ -119,6 +118,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
             }
         });
 
+
         return rootView;
     }
 
@@ -127,12 +127,13 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
         List<CoinMarketCapDetailsModel> queriedCoins = new ArrayList<>();
         for(CoinMarketCapDetailsModel coin : listedCoins)
         {
-            if(coin.symbol.contains(query.toUpperCase()))
+            String coinName = coin.currencyName;
+            if(coinName.toLowerCase().contains(query.toLowerCase()))
             {
                 queriedCoins.add(coin);
             }
         }
-        updateAdapter();
+        recyclerView.setAdapter(new ListAdapter(queriedCoins, self));
     }
 
     public String getTitle()
@@ -196,10 +197,17 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     @Override
     public void listedCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
-        displayPostRequestToast();
-        swipeView.setRefreshing(false);
-        this.listedCoins = listedCoins;
-        updateAdapter();
+        if(Utils.isNetworkAvailable(getContext()))
+        {
+            Toasty.success(getContext(), "New data fetched", Toast.LENGTH_SHORT, true).show();
+            swipeView.setRefreshing(false);
+            this.listedCoins = listedCoins;
+            updateAdapter();
+        }
+        else
+        {
+            Toasty.error(getContext(), "You are in offline mode", Toast.LENGTH_SHORT, true).show();
+        }
     }
 
     @Override
@@ -227,17 +235,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     @Override
     public void fetchingErrorCallback(Throwable t)
     {
-    }
-
-    private void displayPostRequestToast()
-    {
-        if(Utils.isNetworkAvailable(getContext()))
-        {
-            Toasty.success(getContext(), "New data fetched", Toast.LENGTH_SHORT, true).show();
-        }
-        else
-        {
-            Toasty.warning(getContext(), "You are in offline mode", Toast.LENGTH_SHORT, true).show();
-        }
+        Toasty.error(getContext(), "Something went wrong, please let me know!", Toast.LENGTH_LONG, true).show();
     }
 }
