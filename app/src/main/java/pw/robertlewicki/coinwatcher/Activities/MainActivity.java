@@ -1,5 +1,6 @@
 package pw.robertlewicki.coinwatcher.Activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -62,6 +63,11 @@ public class MainActivity extends AppCompatActivity
         {
             sectionsPagerAdapter.clearWatchList();
             return true;
+        }
+        else if(id == R.id.action_about_page)
+        {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
         else if(id == R.id.action_search)
         {

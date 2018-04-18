@@ -9,6 +9,12 @@
         app:showAsAction="never"
     />
     <item
+        android:id="@+id/action_about_page"
+        android:orderInCategory="300"
+        android:title="@string/about"
+        app:showAsAction="never"
+    />
+    <item
         android:id="@+id/action_search"
         android:orderInCategory="50"
         android:title="@string/search_title"
