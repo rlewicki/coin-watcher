@@ -197,10 +197,10 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     @Override
     public void listedCoinsCallback(List<CoinMarketCapDetailsModel> listedCoins)
     {
+        swipeView.setRefreshing(false);
         if(Utils.isNetworkAvailable(getContext()))
         {
             Toasty.success(getContext(), "New data fetched", Toast.LENGTH_SHORT, true).show();
-            swipeView.setRefreshing(false);
             this.listedCoins = listedCoins;
             updateAdapter();
         }
@@ -235,6 +235,7 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     @Override
     public void fetchingErrorCallback(Throwable t)
     {
-        Toasty.error(getContext(), "Something went wrong, please let me know!", Toast.LENGTH_LONG, true).show();
+        swipeView.setRefreshing(false);
+        Toasty.error(getContext(), "You are in offline mode!", Toast.LENGTH_SHORT, true).show();
     }
 }

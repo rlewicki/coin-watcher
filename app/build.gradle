@@ -61,7 +61,7 @@ dependencies {
 
     implementation 'com.github.GrenderG:Toasty:1.2.8'
 
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
 
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'me.grantland:autofittextview:0.2.1'
