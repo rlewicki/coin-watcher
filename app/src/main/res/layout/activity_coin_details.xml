@@ -35,7 +35,9 @@
         android:layout_marginTop="?attr/actionBarSize">
 
         <!-- Rank field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
+        <LinearLayout
+            style="@style/HorizontalLayoutStyle"
+            android:layout_marginTop="16dp">
             <TextView style="@style/LabelTextStyle"
                 android:id="@+id/rankLabel"
                 android:text="@string/rank"/>
