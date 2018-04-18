@@ -27,157 +27,161 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize">
-
-        <!-- Rank field -->
+        android:layout_height="match_parent">
         <LinearLayout
-            style="@style/HorizontalLayoutStyle"
-            android:layout_marginTop="16dp">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/rankLabel"
-                android:text="@string/rank"/>
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
 
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/rankField"
-                android:text="@string/lorem_ipsum" />
+            <!-- Rank field -->
+            <LinearLayout
+                style="@style/HorizontalLayoutStyle"
+                android:layout_marginTop="16dp">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/rankLabel"
+                    android:text="@string/rank"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/rankField"
+                    android:text="@string/lorem_ipsum" />
+            </LinearLayout>
+
+            <!-- Full name field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/fullNameLabel"
+                    android:text="@string/full_name"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/fullNameField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- USD price field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/priceUsdLabel"
+                    android:text="@string/price_usd"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/priceUsdField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- BTC price field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/priceBtcLabel"
+                    android:text="@string/price_btc"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/priceBtcField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Hourly percent change field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/hourlyPercentChangeLabel"
+                    android:text="@string/hourlyPercentChange"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/hourlyPercentChangeField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Daily percent change field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/dailyPercentChangeLabel"
+                    android:text="@string/dailyPercentChange"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/dailyPercentChangeField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Weekly percent change field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/weeklyPercentChangeLabel"
+                    android:text="@string/weeklyPercentChange"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/weeklyPercentChangeField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Daily volume field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/dailyVolumeUsdLabel"
+                    android:text="@string/volume_24h"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/dailyVolumeUsdField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Market cap field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/marketCapUsdLabel"
+                    android:text="@string/market_cap"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/marketCapUsdField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Available supply field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/availableSupplyLabel"
+                    android:text="@string/available_supply"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/availableSupplyField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Total supply field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/totalSupplyLabel"
+                    android:text="@string/total_supply"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/totalSupplyField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
+
+            <!-- Last updated field -->
+            <LinearLayout style="@style/HorizontalLayoutStyle">
+                <TextView style="@style/LabelTextStyle"
+                    android:id="@+id/lastUpdateTimeLabel"
+                    android:text="@string/last_updated"/>
+
+                <me.grantland.widget.AutofitTextView
+                    style="@style/TextStyle"
+                    android:id="@+id/lastUpdateTimeField"
+                    android:text="@string/lorem_ipsum"/>
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- Full name field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/fullNameLabel"
-                android:text="@string/full_name"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/fullNameField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- USD price field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/priceUsdLabel"
-                android:text="@string/price_usd"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/priceUsdField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- BTC price field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/priceBtcLabel"
-                android:text="@string/price_btc"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/priceBtcField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Hourly percent change field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/hourlyPercentChangeLabel"
-                android:text="@string/hourlyPercentChange"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/hourlyPercentChangeField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Daily percent change field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/dailyPercentChangeLabel"
-                android:text="@string/dailyPercentChange"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/dailyPercentChangeField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Weekly percent change field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/weeklyPercentChangeLabel"
-                android:text="@string/weeklyPercentChange"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/weeklyPercentChangeField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Daily volume field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/dailyVolumeUsdLabel"
-                android:text="@string/volume_24h"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/dailyVolumeUsdField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Market cap field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/marketCapUsdLabel"
-                android:text="@string/market_cap"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/marketCapUsdField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Available supply field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/availableSupplyLabel"
-                android:text="@string/available_supply"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/availableSupplyField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Total supply field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/totalSupplyLabel"
-                android:text="@string/total_supply"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/totalSupplyField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-
-        <!-- Last updated field -->
-        <LinearLayout style="@style/HorizontalLayoutStyle">
-            <TextView style="@style/LabelTextStyle"
-                android:id="@+id/lastUpdateTimeLabel"
-                android:text="@string/last_updated"/>
-
-            <me.grantland.widget.AutofitTextView
-                style="@style/TextStyle"
-                android:id="@+id/lastUpdateTimeField"
-                android:text="@string/lorem_ipsum"/>
-        </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -22,8 +22,9 @@
         <item name="android:paddingStart">6dp</item>
         <item name="android:textColor">#212121</item>
         <item name="android:layout_width">156dp</item>
-        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="TextStyle">
@@ -31,12 +32,13 @@
         <item name="android:paddingStart">6dp</item>
         <item name="android:textColor">#212121</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">26dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="HorizontalLayoutStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:layout_marginStart">12dp</item>
