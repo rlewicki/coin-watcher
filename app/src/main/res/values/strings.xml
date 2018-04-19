@@ -17,4 +17,8 @@
     <string name="dailyPercentChange">Daily change:</string>
     <string name="weeklyPercentChange">Weekly change:</string>
     <string name="about">About</string>
+    <string name="tap_desc">Tap on row to display crypto currency details.</string>
+    <string name="hold_desc">Hold finger on row to add crypto currency to watch list</string>
+    <string name="tutorial_title">Quick start</string>
+    <string name="tutorial_button_text">Dismiss</string>
 </resources>

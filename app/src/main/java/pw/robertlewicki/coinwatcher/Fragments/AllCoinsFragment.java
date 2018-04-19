@@ -3,16 +3,21 @@ package pw.robertlewicki.coinwatcher.Fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import es.dmoral.toasty.Toasty;
+import outlander.showcaseview.ShowcaseViewBuilder;
 import pw.robertlewicki.coinwatcher.Adapters.ListAdapter;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCap;
 import pw.robertlewicki.coinwatcher.CoinMarketCapApi.CoinMarketCapCoinsIdsModel;
@@ -59,6 +65,9 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     private int dataSources = 2;
     private int callbacksReceived = 0;
 
+    private boolean shouldShowTutorial = false;
+    private int tutorialStep = 0;
+
     public static AllCoinsFragment newInstance(String title, Application app, WatchList watchList)
     {
         AllCoinsFragment fragment = new AllCoinsFragment();
@@ -84,12 +93,27 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
         View rootView = inflater.inflate(R.layout.all_coins_fragment, container, false);
         ButterKnife.bind(this, rootView);
 
+        checkForTutorialPassed();
+
         recyclerView = (RecyclerView)rootView.findViewById(R.id.CoinListView);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
+
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+        {
+            @Override
+            public void onGlobalLayout()
+            {
+                if(recyclerView.getChildAt(0) != null && shouldShowTutorial == false)
+                {
+                    shouldShowTutorial = true;
+                    startTutorial();
+                }
+            }
+        });
 
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
@@ -118,7 +142,6 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
             }
         });
 
-
         return rootView;
     }
 
@@ -133,7 +156,8 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
                 queriedCoins.add(coin);
             }
         }
-        recyclerView.setAdapter(new ListAdapter(queriedCoins, self));
+        listAdapter = new ListAdapter(queriedCoins, self);
+        recyclerView.setAdapter(listAdapter);
     }
 
     public String getTitle()
@@ -188,9 +212,38 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
                 @Override
                 public void run()
                 {
-                    recyclerView.setAdapter(new ListAdapter(listedCoins, self));
+                    listAdapter = new ListAdapter(listedCoins, self);
+                    recyclerView.setAdapter(listAdapter);
                 }
             });
+        }
+    }
+
+    private void startTutorial()
+    {
+        if(tutorialStep == 0)
+        {
+            View firstItemView = recyclerView.getChildAt(0).findViewById(R.id.CoinIcon);
+            final ShowcaseViewBuilder showcaseViewBuilder;
+
+            showcaseViewBuilder = ShowcaseViewBuilder.init(getActivity())
+                    .setTargetView(firstItemView)
+                    .setBackgroundOverlayColor(0xdd4d4d4d)
+                    .setRingColor(0xcc8e8e8e)
+                    .addCustomView(R.layout.tutorial_description, Gravity.BOTTOM)
+                    .setCustomViewMargin((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, getResources().getDisplayMetrics()));
+
+            showcaseViewBuilder.setClickListenerOnView(R.id.dismissButton, new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    passTutorial();
+                    showcaseViewBuilder.hide();
+                }
+            });
+
+            showcaseViewBuilder.show();
         }
     }
 
@@ -237,5 +290,19 @@ public class AllCoinsFragment extends Fragment implements CoinMarketCapObserver,
     {
         swipeView.setRefreshing(false);
         Toasty.error(getContext(), "You are in offline mode!", Toast.LENGTH_SHORT, true).show();
+    }
+
+    private void checkForTutorialPassed()
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        shouldShowTutorial = preferences.getBoolean("tutorial", false);
+    }
+
+    private void passTutorial()
+    {
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("tutorial", true);
+        editor.apply();
     }
 }
