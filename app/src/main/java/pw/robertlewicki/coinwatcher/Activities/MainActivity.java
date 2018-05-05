@@ -1,8 +1,6 @@
 package pw.robertlewicki.coinwatcher.Activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -13,38 +11,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
+import dagger.android.AndroidInjection;
 import pw.robertlewicki.coinwatcher.Adapters.SectionsPagerAdapter;
-import pw.robertlewicki.coinwatcher.Interfaces.IFileStorageHandler;
 import pw.robertlewicki.coinwatcher.R;
 
-public class MainActivity extends AppCompatActivity implements IFileStorageHandler
+public class MainActivity extends AppCompatActivity
 {
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        AndroidInjection.inject(this);
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        sectionsPagerAdapter = new SectionsPagerAdapter(
-                getSupportFragmentManager(), getApplication(), this);
-
-        viewPager = (ViewPager) findViewById(R.id.container);
-        viewPager.setAdapter(sectionsPagerAdapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        setupUi();
     }
 
     @Override
@@ -82,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
             sectionsPagerAdapter.clearWatchList();
             return true;
         }
+        else if(id == R.id.action_about_page)
+        {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        }
         else if(id == R.id.action_search)
         {
             return true;
@@ -90,62 +77,20 @@ public class MainActivity extends AppCompatActivity implements IFileStorageHandl
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void saveToFile(String filepath, String data)
+    private void setupUi()
     {
-        try
-        {
-            FileOutputStream file = openFileOutput(filepath, Context.MODE_PRIVATE);
-            file.write(data.getBytes());
-            file.close();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
+        setContentView(R.layout.activity_main);
 
-    @Override
-    public String loadFromFile(String filepath)
-    {
-        try
-        {
-            String fileContent;
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            FileInputStream file = openFileInput(filepath);
-            InputStreamReader inputStreamReader = new InputStreamReader(file);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuilder stringBuilder = new StringBuilder();
-            String buffer;
-            while((buffer = bufferedReader.readLine()) != null)
-            {
-                stringBuilder.append(buffer);
-            }
-            fileContent = stringBuilder.toString();
-            return fileContent;
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
+        sectionsPagerAdapter = new SectionsPagerAdapter(
+                getSupportFragmentManager(), getApplication());
 
-        return null;
-    }
+        ViewPager viewPager = findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
 
-    @Override
-    public void saveToSharedPreferences(String key, long value)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putLong(key, value);
-        editor.apply();
-    }
-
-    @Override
-    public long loadFromSharedPreferences(String key)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        long value = preferences.getLong(key, -1);
-        return value;
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

@@ -6,7 +6,7 @@
     android:id="@+id/SwipeView"
     tools:context="pw.robertlewicki.coinwatcher.Activities.MainActivity">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/CoinListView"

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Coin Watcher</string>
-    <string name="action_clear_list">Clear my watch list</string>
+    <string name="action_clear_list">Clear watch list</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="lorem_ipsum">Lorem Ipsum</string>
     <string name="search_title">Search</string>
@@ -12,4 +12,13 @@
     <string name="available_supply">Available supply:</string>
     <string name="total_supply">Total supply:</string>
     <string name="last_updated">Last updated:</string>
+    <string name="price_btc">Price BTC:</string>
+    <string name="hourlyPercentChange">Hourly change:</string>
+    <string name="dailyPercentChange">Daily change:</string>
+    <string name="weeklyPercentChange">Weekly change:</string>
+    <string name="about">About</string>
+    <string name="tap_desc">Tap on row to display crypto currency details.</string>
+    <string name="hold_desc">Hold finger on row to add crypto currency to watch list</string>
+    <string name="tutorial_title">Quick start</string>
+    <string name="tutorial_button_text">Dismiss</string>
 </resources>

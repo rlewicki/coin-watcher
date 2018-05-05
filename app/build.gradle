@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "pw.robertlewicki.coinwatcher"
         minSdkVersion 19
-        targetSdkVersion 25
-        versionCode 2
-        versionName "1.1b"
+        targetSdkVersion 27
+        versionCode 3
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary true
     }
@@ -29,22 +29,44 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:support-core-ui:25.3.1'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:support-core-ui:27.1.0'
 
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
 
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.8.47"
+    implementation 'com.google.dagger:dagger:2.15'
+    implementation 'com.google.dagger:dagger-android:2.15'
+    implementation 'com.google.dagger:dagger-android-support:2.15'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.15'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-jackson:2.4.0'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+
+    implementation 'com.github.GrenderG:Toasty:1.2.8'
+
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
+
+    implementation 'com.outlander.showcaseview:showcaseview:1.2.0'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'me.grantland:autofittextview:0.2.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.47'
 }
